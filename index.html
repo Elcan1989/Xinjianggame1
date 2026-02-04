@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>對話遊戲：前情提要版</title>
+    <title>對話遊戲：點擊前情版</title>
     <style>
       :root {
         --bg-color: #2563eb; /* 你的藍色背景 */
@@ -13,64 +13,71 @@
         margin: 0; padding: 0;
         width: 100%; height: 100%;
         overflow: hidden;
-        background-color: #000; /* 預設全黑 */
+        background-color: #000;
         font-family: "Microsoft JhengHei", sans-serif;
       }
 
-      /* --- 前情動畫樣式 --- */
+      /* --- 前情動畫層 (點擊式) --- */
       #intro-overlay {
         position: fixed;
         top: 0; left: 0;
         width: 100%; height: 100%;
         background: #000;
         display: flex;
+        flex-direction: column;
         justify-content: center;
         align-items: center;
         z-index: 1000;
         color: white;
-        text-align: center;
+        cursor: pointer;
       }
 
       .intro-text {
         font-size: 1.8rem;
-        letter-spacing: 5px;
-        opacity: 0;
-        animation: fadeInOut 4s forwards; /* 4秒的淡入淡出動畫 */
+        letter-spacing: 3px;
+        text-align: center;
+        max-width: 80%;
+        line-height: 1.8;
+        transition: opacity 0.5s ease;
       }
 
-      @keyframes fadeInOut {
-        0% { opacity: 0; transform: translateY(10px); }
-        30% { opacity: 1; transform: translateY(0); }
-        70% { opacity: 1; transform: translateY(0); }
-        100% { opacity: 0; transform: translateY(-10px); }
+      .click-hint {
+        position: absolute;
+        bottom: 50px;
+        font-size: 0.9rem;
+        color: #666;
+        animation: blink 2s infinite;
       }
 
-      /* --- 主遊戲畫面 (初始隱藏) --- */
+      @keyframes blink {
+        0%, 100% { opacity: 0; }
+        50% { opacity: 1; }
+      }
+
+      /* --- 主遊戲畫面 --- */
       .game-container {
         position: relative;
         width: 100vw; height: 100vh;
         background: var(--bg-color);
         background-size: cover;
-        display: none; /* 由 JS 開啟 */
+        display: none;
       }
 
-      /* 紅色地區名 (右上角) */
       .location-tag {
         position: absolute;
         top: 30px; right: 30px;
-        background: #ef4444;
+        background: #ef4444; /* 紅色 */
         color: white;
-        padding: 10px 20px;
+        padding: 10px 25px;
         font-size: 1.5rem;
         font-weight: bold;
         border-radius: 8px;
         z-index: 100;
       }
 
-      /* 綠色角色立繪 */
       .character-sprite {
         position: absolute;
-        bottom: 250px; /* 站在黃色框上方 */
+        bottom: 250px;
         left: 10%;
         width: 350px;
         z-index: 10;
@@ -89,8 +96,8 @@
         z-index: 50;
       }
 
-      .speaker-name { font-size: 1.6rem; font-weight: bold; margin-bottom: 10px; }
-      .dialogue-text { font-size: 1.3rem; line-height: 1.6; margin-bottom: 20px; }
+      .speaker-name { font-size: 1.6rem; font-weight: bold; margin-bottom: 10px; color: #000; }
+      .dialogue-text { font-size: 1.4rem; line-height: 1.6; margin-bottom: 20px; color: #000; }
       .choices-container { display: flex; gap: 15px; }
 
       .choice-btn {
@@ -102,9 +109,12 @@
   </head>
   <body>
 
-    <div id="intro-overlay">
-      <div class="intro-text" id="intro-content">這是一段發生在邊境的故事...</div>
-    </div>
+   <div id="intro-overlay" onclick="nextIntro()">
+  <img id="intro-img" src="" style="max-width: 80%; max-height: 60%; margin-bottom: 20px; display: none; transition: opacity 0.5s ease;">
+  
+  <div class="intro-text" id="intro-content">內容載入中...</div>
+  <div class="click-hint">點擊螢幕繼續</div>
+</div>
 
     <main class="game-container" id="game-main">
       <div class="location-tag" id="location">地區名稱</div>
@@ -115,47 +125,89 @@
 
       <section class="dialogue-bar">
         <div class="speaker-name" id="speaker">說話者</div>
-        <div class="dialogue-text" id="dialogue">內容載入中...</div>
+        <div class="dialogue-text" id="dialogue">內容...</div>
         <div class="choices-container" id="choices"></div>
       </section>
     </main>
 
     <script>
+      // --- 前情提要設定 ---
+      const introLines = [
+        { text: "", img: "你的工作室圖.png" }, // 第一格放工作室圖片
+        { text: "這是一段關於生存的故事...", img: "" },
+        { text: "在這裡，自由是奢侈的空氣。", img: "" },
+        { text: "有些錯誤，必須用時間來償還。", img: "" },
+        { text: "你準備好面對眼前的挑戰了嗎？", img: "" }
+      ];
+      let currentIntroIndex = 0;
+
+      function nextIntro() {
+        const content = document.getElementById('intro-content');
+        const introImg = document.getElementById('intro-img');
+  
+        // 先讓內容淡出
+        content.style.opacity = 0;
+        introImg.style.opacity = 0;
+
+        setTimeout(() => {
+          currentIntroIndex++; // 點擊後增加索引
+    
+          if (currentIntroIndex < introLines.length) {
+            const currentData = introLines[currentIntroIndex];
+
+            // 處理文字
+            content.textContent = currentData.text;
+            content.style.opacity = 1;
+
+            // 處理圖片
+            if (currentData.img !== "") {
+              introImg.src = currentData.img;
+              introImg.style.display = "block";
+              setTimeout(() => { introImg.style.opacity = 1; }, 50); // 微調淡入感
+            } else {
+              introImg.style.display = "none";
+            }
+          } else {
+            // 講完了，進入遊戲
+            document.getElementById('intro-overlay').style.display = 'none';
+            document.getElementById('game-main').style.display = 'block';
+            renderNode('start');
+          }
+        }, 500);
+      }
+
+      // 初始啟動：因為我們點擊才換下一張，所以第一張要先手動呼叫顯示
+      window.onload = () => {
+        const firstData = introLines[0];
+        const content = document.getElementById('intro-content');
+        const introImg = document.getElementById('intro-img');
+
+        content.textContent = firstData.text;
+        if (firstData.img !== "") {
+          introImg.src = firstData.img;
+          introImg.style.display = "block";
+          introImg.style.opacity = 1;
+        }
+      };
+
+      // --- 遊戲邏輯設定 ---
       const nodes = {
         start: {
           location: "勞改營入口",
           speaker: "張教官",
           text: "我是張教官，歡迎來到這裡反省。",
-          charImg: "https://via.placeholder.com/400x600/22c55e/ffffff?text=綠色角色",
+          charImg: "https://via.placeholder.com/400x600/22c55e/ffffff?text=張教官", // 換成你的綠色角色
           choices: [{ text: "點擊繼續", next: "next1" }]
         },
         next1: {
           location: "勞改營內部",
           speaker: "張教官",
-          text: "現在，跟著我念一遍宣言。",
-          charImg: "https://via.placeholder.com/400x600/22c55e/ffffff?text=綠色角色",
-          choices: [{ text: "重新開始", next: "start" }]
+          text: "現在，開始你第一天的勞動。",
+          charImg: "https://via.placeholder.com/400x600/22c55e/ffffff?text=張教官",
+          choices: [{ text: "重新開始遊戲", next: "start" }]
         }
       };
 
-      // 1. 處理動畫邏輯
-      window.onload = () => {
-        const introText = document.getElementById('intro-content');
-        
-        // 如果你想有多段文字，可以用 setTimeout
-        setTimeout(() => {
-          introText.textContent = "有些錯誤，必須用時間來償還。";
-        }, 4000); // 4秒後換下一句
-
-        // 8秒後關閉動畫，顯示遊戲
-        setTimeout(() => {
-          document.getElementById('intro-overlay').style.display = 'none';
-          document.getElementById('game-main').style.display = 'block';
-          renderNode('start');
-        }, 8000);
-      };
-
-      // 2. 遊戲渲染邏輯
       function renderNode(nodeId) {
         const node = nodes[nodeId];
         document.getElementById('location').textContent = node.location;
