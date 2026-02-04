@@ -1,0 +1,182 @@
+<!doctype html>
+<html lang="zh-Hant">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>對話遊戲：自定義版</title>
+    <style>
+      :root {
+        /* 在這裡替換你的背景顏色或圖片網址 */
+        --bg-color: #2563eb; 
+      }
+
+      body, html {
+        margin: 0;
+        padding: 0;
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+        font-family: sans-serif;
+      }
+
+      /* 藍色背景區 */
+      .game-container {
+        position: relative;
+        width: 100vw;
+        height: 100vh;
+        background: var(--bg-color); /* 你可以改成 background-image: url('你的圖.png'); */
+        background-size: cover;
+        background-position: center;
+      }
+
+      /* 紅色地區名 (右上角) */
+      .location-tag {
+        position: absolute;
+        top: 30px;
+        right: 30px;
+        background: #ef4444; /* 紅色 */
+        color: white;
+        padding: 10px 20px;
+        font-size: 1.5rem;
+        font-weight: bold;
+        border-radius: 8px;
+        z-index: 100;
+      }
+
+      /* 綠色角色立繪 */
+      .character-sprite {
+        position: absolute;
+        bottom: 200px; /* 站在對話框上方 */
+        left: 10%;    /* 靠左邊一點 */
+        width: 400px;  /* 調整你的角色大小 */
+        height: auto;
+        z-index: 10;
+        transition: all 0.5s ease;
+      }
+
+      .character-sprite img {
+        width: 100%;
+        display: block;
+      }
+
+      /* 黃色對話框區 */
+      .dialogue-bar {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        height: 250px; /* 對話框高度 */
+        background: #fde047; /* 黃色 */
+        border-top: 5px solid #000;
+        padding: 30px;
+        box-sizing: border-box;
+        z-index: 50;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+      }
+
+      .speaker-name {
+        font-size: 1.5rem;
+        font-weight: bold;
+        color: #000;
+        margin-bottom: 10px;
+      }
+
+      .dialogue-text {
+        font-size: 1.2rem;
+        line-height: 1.6;
+        color: #1a1a1a;
+        margin-bottom: 20px;
+      }
+
+      /* 選項按鈕排版 */
+      .choices-container {
+        display: flex;
+        gap: 15px;
+      }
+
+      .choice-btn {
+        padding: 10px 20px;
+        background: #000;
+        color: #fff;
+        border: none;
+        cursor: pointer;
+        font-size: 1rem;
+      }
+
+      .choice-btn:hover {
+        background: #444;
+      }
+    </style>
+  </head>
+  <body>
+
+    <main class="game-container" id="main-bg">
+      <div class="location-tag" id="location">地區名稱</div>
+
+      <div class="character-sprite">
+        <img id="char-img" src="" alt="角色">
+      </div>
+
+      <section class="dialogue-bar">
+        <div class="speaker-name" id="speaker">說話者</div>
+        <div class="dialogue-text" id="dialogue">內容載入中...</div>
+        <div class="choices-container" id="choices"></div>
+      </section>
+    </main>
+
+    <script>
+      // 這裡定義你的劇情資料
+      const nodes = {
+        start: {
+          location: "勞改營入口",
+          speaker: "張教官",
+          text: "我是張教官，歡迎來到這裡反省。",
+          charImg: "https://via.placeholder.com/400x600/22c55e/ffffff?text=張教官", // 替換成你的綠色角色圖
+          choices: [
+            { text: "點擊繼續", next: "next1" }
+          ]
+        },
+        next1: {
+          location: "勞改營內部",
+          speaker: "張教官",
+          text: "現在，跟著我念一遍宣言。",
+          charImg: "https://via.placeholder.com/400x600/22c55e/ffffff?text=張教官",
+          choices: [
+            { text: "大聲念出來", next: "start" },
+            { text: "保持沉默", next: "start" }
+          ]
+        }
+      };
+
+      function renderNode(nodeId) {
+        const node = nodes[nodeId];
+        
+        // 更新紅色地區名
+        document.getElementById('location').textContent = node.location;
+        
+        // 更新說話者與文字
+        document.getElementById('speaker').textContent = node.speaker;
+        document.getElementById('dialogue').textContent = node.text;
+        
+        // 更新角色圖片
+        document.getElementById('char-img').src = node.charImg;
+
+        // 清除並重建黃色框內的按鈕
+        const choicesEl = document.getElementById('choices');
+        choicesEl.innerHTML = "";
+        node.choices.forEach(choice => {
+          const btn = document.createElement('button');
+          btn.className = "choice-btn";
+          btn.textContent = choice.text;
+          btn.onclick = () => renderNode(choice.next);
+          choicesEl.appendChild(btn);
+        });
+      }
+
+      // 啟動遊戲
+      renderNode('start');
+    </script>
+  </body>
+</html>
