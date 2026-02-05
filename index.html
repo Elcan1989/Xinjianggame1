@@ -129,7 +129,26 @@
       cursor: pointer; 
       font-size: 1rem;
       transition: all 0.2s;
+      margin-right: 10px;
     }
+
+    /* 新增：玩家狀態 HUD 樣式 */
+    .hud-container {
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      z-index: 100;
+      color: white;
+      background: rgba(0, 0, 0, 0.6);
+      padding: 15px;
+      border-radius: 8px;
+      font-size: 0.9rem;
+      border: 1px solid rgba(255,255,255,0.2);
+    }
+    .hud-item { margin-bottom: 5px; }
+    .hud-label { color: #94a3b8; margin-right: 5px; }
+    .hud-value { color: #fbbf24; font-weight: bold; }
+    .quest-tag { color: #10b981; }
   </style>
 </head>
 <body>
@@ -141,7 +160,14 @@
   </div>
 
   <main class="game-container" id="game-main">
-    <div class="location-tag" id="location">地區名稱</div>
+    <div class="hud-container">
+      <div class="hud-item"><span class="hud-label">信用值:</span><span class="hud-value" id="ui-credit">0</span></div>
+      <div class="hud-item"><span class="hud-label">金錢:</span><span class="hud-value">$<span id="ui-money">0</span></span></div>
+      <div class="hud-item"><span class="hud-label">背包:</span><span id="ui-inventory">空</span></div>
+      <div class="hud-item"><span class="hud-label">當前任務:</span><span class="quest-tag" id="ui-quest">無</span></div>
+    </div>
+
+    <div class="location-tag" id="location" style="position:absolute; top:20px; right:20px; color:white; background:rgba(0,0,0,0.5); padding:5px 15px; z-index:60;">地區名稱</div>
     <div class="character-sprite">
       <img id="char-img" src="" alt="角色">
     </div>
@@ -153,6 +179,14 @@
   </main>
 
   <script>
+    // --- 玩家狀態資料 ---
+    let playerState = {
+      credit: 1,      // 初始信用值
+      money: 100,     // 初始金錢
+      inventory: [],  // 道具區
+      quests: []      // 任務區
+    };
+
     const introLines = [
       { text: "機智楊老生活：逃離勞改營", img: "photo.png" },
       { text: "機智楊老生活逃離勞改營製作小組出品", img: "" },
@@ -176,7 +210,8 @@
         } else {
           clearInterval(timer);
           isTyping = false; // 打字完成，解除鎖定
-          document.querySelector('.click-hint').style.opacity = 1; // 顯示提示文字
+          const hint = document.querySelector('.click-hint');
+          if(hint) hint.style.opacity = 1; // 顯示提示文字
         }
       }, speed);
     }
@@ -239,12 +274,14 @@
     };
 
     // --- 遊戲劇情資料節點 ---
+    // 新增邏輯：action (觸發動作), condition (顯示條件)
     const nodes = {
       start: {
         location: "勞改營入口",
         speaker: "張教官",
         text: "我是張教官，我是來告訴你們為什麼會來到這裡。",
         charImg: "chang.png",
+        action: () => { playerState.quests = ["活下去"]; }, // 接收初始任務
         choices: [{ text: "點擊繼續", next: "next1" }]
       },
       next1: {
@@ -262,7 +299,7 @@
         choices: [
           { text: "跟著念", next: "speak" },
           { text: "含糊帶過", next: "speaklittle" },
-          { text: "不念", next: "nospeak" }
+          { text: "不念 (信用值扣除)", next: "nospeak" }
         ]
       }, // 注意這裡原本少了逗號
       speak: {
@@ -287,6 +324,7 @@
         speaker: "張教官",
         text: "居然敢保持沉默？看來你是個硬骨頭。警衛！把他拖進去！",
         charImg: "chang.png",
+        action: () => { playerState.credit -= 1; }, // 信用值扣除
         choices: [{ text: "被強行拖走", next: "story1" }]
       },
       nomove: {
@@ -299,15 +337,74 @@
       story1: {
         location: "牢房",
         speaker: "旁白",
-        text: "重重的鐵門在身後關上。這裡是你的新家，編號 9527。",
+        text: "重重的鐵門在身後關上。這裡是你的新家，編號 9527。你想做什麼？",
         charImg: "",
-        choices: [{ text: "待續...", next: "start" }]
+        choices: [
+          { text: "檢查床鋪", next: "check_bed" },
+          { 
+            text: "賄賂守衛 ($50)", 
+            next: "bribe_success", 
+            condition: () => playerState.money >= 50,
+            action: () => { playerState.money -= 50; }
+          },
+          { text: "休息", next: "start" }
+        ]
+      },
+      check_bed: {
+        location: "牢房",
+        speaker: "系統",
+        text: "你在床板下發現了一根生鏽的鐵絲。",
+        charImg: "",
+        action: () => { 
+            if(!playerState.inventory.includes("鐵絲")) playerState.inventory.push("鐵絲"); 
+        },
+        choices: [{ text: "收起來", next: "story1" }]
+      },
+      bribe_success: {
+        location: "牢房門口",
+        speaker: "守衛",
+        text: "算你識相，這把鑰匙你拿著，晚上安分點。",
+        charImg: "guard.png",
+        action: () => { playerState.inventory.push("後門鑰匙"); },
+        choices: [{ text: "回到牢房", next: "story1" }]
+      },
+      game_over_credit: {
+        location: "小黑屋",
+        speaker: "系統",
+        text: "你的信用值歸零。你被判定為無法改造的廢料，已遭到清理。",
+        charImg: "",
+        choices: [{ text: "重新開始", next: "reset_game" }]
       }
     };
 
+    function updateUI() {
+        document.getElementById('ui-credit').textContent = playerState.credit;
+        document.getElementById('ui-money').textContent = playerState.money;
+        document.getElementById('ui-inventory').textContent = playerState.inventory.join(', ') || "空";
+        document.getElementById('ui-quest').textContent = playerState.quests[playerState.quests.length - 1] || "無";
+    }
+
     function renderNode(nodeId) {
+      // 處理重新開始
+      if(nodeId === 'reset_game') {
+        playerState = { credit: 1, money: 100, inventory: [], quests: [] };
+        nodeId = 'start';
+      }
+
       const node = nodes[nodeId];
       if (!node) return;
+
+      // 執行節點動作
+      if (node.action) node.action();
+      
+      // 更新介面數值
+      updateUI();
+
+      // 檢查信用值死亡結局
+      if (playerState.credit <= 0 && nodeId !== 'game_over_credit') {
+        renderNode('game_over_credit');
+        return;
+      }
 
       document.getElementById('location').textContent = node.location;
       document.getElementById('speaker').textContent = node.speaker;
@@ -320,9 +417,13 @@
       } else {
         charImg.style.display = "none"; // 如果該節點沒圖（如旁白時）就隱藏
       }
+
       const choicesEl = document.getElementById('choices');
       choicesEl.innerHTML = "";
       node.choices.forEach(choice => {
+        // 檢查條件 (例如金錢是否足夠)
+        if (choice.condition && !choice.condition()) return;
+
         const btn = document.createElement('button');
         btn.className = "choice-btn";
         btn.textContent = choice.text;
