@@ -134,27 +134,52 @@
   <script>
     const introLines = [
       { text: "機智楊老生活：逃離勞改營", img: "photo.png" },
+      { text: "機智楊老生活逃離勞改營製作小組出品", img: "" },
       { text: "這是一段不為人知的故事...", img: "" },
       { text: "在這裡，自由是奢侈的空氣。", img: "" },
       { text: "你能活著離開這裡嗎？", img: "" }
     ];
-    
+
     let currentIntroIndex = 0;
+    let isTyping = false; // 標記目前是否正在打字中
+
+    function typeWriter(element, text, speed = 100) {
+      let i = 0;
+      element.textContent = "";
+      isTyping = true; // 開始打字，鎖定點擊
+
+      const timer = setInterval(() => {
+        if (i < text.length) {
+          element.textContent += text.charAt(i);
+          i++;
+        } else {
+          clearInterval(timer);
+          isTyping = false; // 打字完成，解除鎖定
+          document.querySelector('.click-hint').style.opacity = 1; // 顯示提示文字
+        }
+      }, speed);
+    }
 
     function nextIntro() {
+      // 如果正在打字，則不允許點擊下一頁
+      if (isTyping) return;
+
       const content = document.getElementById('intro-content');
       const introImg = document.getElementById('intro-img');
+      const hint = document.querySelector('.click-hint');
 
+      // 先讓內容淡出
       content.style.opacity = 0;
       introImg.style.opacity = 0;
+      hint.style.opacity = 0;
 
       setTimeout(() => {
-        currentIntroIndex++;
+        currentIntroIndex++; 
+
         if (currentIntroIndex < introLines.length) {
           const currentData = introLines[currentIntroIndex];
-          content.textContent = currentData.text;
-          content.style.opacity = 1;
 
+          // 處理圖片
           if (currentData.img !== "") {
             introImg.src = currentData.img;
             introImg.style.display = "block";
@@ -162,7 +187,13 @@
           } else {
             introImg.style.display = "none";
           }
+
+          // 處理文字（打字機效果）
+          content.style.opacity = 1;
+          typeWriter(content, currentData.text, 150); // 150ms 是打字速度，可調整
+
         } else {
+          // 講完了，進入遊戲
           document.getElementById('intro-overlay').style.display = 'none';
           document.getElementById('game-main').style.display = 'block';
           renderNode('start');
@@ -170,15 +201,20 @@
       }, 500);
     }
 
+    // 初始啟動
     window.onload = () => {
       const firstData = introLines[0];
-      document.getElementById('intro-content').textContent = firstData.text;
+      const content = document.getElementById('intro-content');
+      const introImg = document.getElementById('intro-img');
+
       if (firstData.img !== "") {
-        const img = document.getElementById('intro-img');
-        img.src = firstData.img;
-        img.style.display = "block";
-        img.style.opacity = 1;
+        introImg.src = firstData.img;
+        introImg.style.display = "block";
+        introImg.style.opacity = 1;
       }
+  
+      // 第一段文字也使用打字機
+      typeWriter(content, firstData.text, 150);
     };
 
     // --- 遊戲劇情資料節點 ---
