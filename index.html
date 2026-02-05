@@ -164,7 +164,7 @@
     let currentIntroIndex = 0;
     let isTyping = false; // 標記目前是否正在打字中
 
-    function typeWriter(element, text, speed = 100) {
+     function typeWriter(element, text, speed = 10) {//速度100
       let i = 0;
       element.textContent = "";
       isTyping = true; // 開始打字，鎖定點擊
