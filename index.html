@@ -1,251 +1,272 @@
 <!doctype html>
 <html lang="zh-Hant">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>逃離勞改營</title>
-    <style>
-      :root {
-        --bg-color: #2563eb; /* 你的藍色背景 */
-      }
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>逃離勞改營</title>
+  <style>
+    :root {
+      --bg-color: #2563eb; 
+    }
 
-      body, html {
-        margin: 0; padding: 0;
-        width: 100%; height: 100%;
-        overflow: hidden;
-        background-color: #000;
-        font-family: "Microsoft JhengHei", sans-serif;
-      }
+    body, html {
+      margin: 0; padding: 0;
+      width: 100%; height: 100%;
+      overflow: hidden;
+      background-color: #000;
+      font-family: "Microsoft JhengHei", "PingFang TC", sans-serif;
+    }
 
-      /* --- 前情動畫層 (點擊式) --- */
-      #intro-overlay {
-        position: fixed;
-        top: 0; left: 0;
-        width: 100%; height: 100%;
-        background: #000;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        z-index: 1000;
-        color: white;
-        cursor: pointer;
-      }
+    /* --- 前情動畫層 --- */
+    #intro-overlay {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: #000;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+      color: white;
+      cursor: pointer;
+    }
 
-      .intro-text {
-        font-size: 1.8rem;
-        letter-spacing: 3px;
-        text-align: center;
-        max-width: 80%;
-        line-height: 1.8;
-        transition: opacity 0.5s ease;
-      }
+    .intro-text {
+      font-size: 1.8rem;
+      letter-spacing: 3px;
+      text-align: center;
+      max-width: 80%;
+      line-height: 1.8;
+      transition: opacity 0.5s ease;
+    }
 
-      .click-hint {
-        position: absolute;
-        bottom: 50px;
-        font-size: 0.9rem;
-        color: #666;
-        animation: blink 2s infinite;
-      }
+    .click-hint {
+      position: absolute;
+      bottom: 50px;
+      font-size: 0.9rem;
+      color: #666;
+      animation: blink 2s infinite;
+    }
 
-      @keyframes blink {
-        0%, 100% { opacity: 0; }
-        50% { opacity: 1; }
-      }
+    @keyframes blink {
+      0%, 100% { opacity: 0; }
+      50% { opacity: 1; }
+    }
 
-      /* --- 主遊戲畫面 --- */
-      .game-container {
-        position: relative;
-        width: 100vw; height: 100vh;
-        background: var(--bg-color);
-        background-size: cover;
-        display: none;
-      }
+    /* --- 主遊戲畫面 --- */
+    .game-container {
+      position: relative;
+      width: 100vw; height: 100vh;
+      background: var(--bg-color);
+      display: none;
+    }
 
-      .location-tag {
-        position: absolute;
-        top: 30px; right: 30px;
-        background: #ef4444; /* 紅色 */
-        color: white;
-        padding: 10px 25px;
-        font-size: 1.5rem;
-        font-weight: bold;
-        border-radius: 8px;
-        z-index: 100;
-      }
+    .location-tag {
+      position: absolute;
+      top: 30px; right: 30px;
+      background: #ef4444;
+      color: white;
+      padding: 10px 25px;
+      font-size: 1.5rem;
+      font-weight: bold;
+      border-radius: 8px;
+      z-index: 100;
+    }
 
-      .character-sprite {
-        position: absolute;
-        bottom: 250px;
-        left: 10%;
-        width: 350px;
-        z-index: 10;
-      }
-      .character-sprite img { width: 100%; }
+    .character-sprite {
+      position: absolute;
+      bottom: 250px;
+      left: 10%;
+      width: 350px;
+      z-index: 10;
+    }
+    .character-sprite img { width: 100%; }
 
-      /* 黃色對話框區 */
-      .dialogue-bar {
-        position: absolute;
-        bottom: 0; left: 0;
-        width: 100%; height: 250px;
-        background: #fde047; /* 黃色 */
-        border-top: 5px solid #000;
-        padding: 30px;
-        box-sizing: border-box;
-        z-index: 50;
-      }
+    /* 黃色對話框區 */
+    .dialogue-bar {
+      position: absolute;
+      bottom: 0; left: 0;
+      width: 100%; height: 250px;
+      background: #fde047;
+      border-top: 5px solid #000;
+      padding: 30px;
+      box-sizing: border-box;
+      z-index: 50;
+    }
 
-      .speaker-name { font-size: 1.6rem; font-weight: bold; margin-bottom: 10px; color: #000; }
-      .dialogue-text { font-size: 1.4rem; line-height: 1.6; margin-bottom: 20px; color: #000; }
-      .choices-container { display: flex; gap: 15px; }
+    .speaker-name { font-size: 1.6rem; font-weight: bold; margin-bottom: 10px; color: #000; }
+    .dialogue-text { font-size: 1.4rem; line-height: 1.6; margin-bottom: 20px; color: #000; }
+    .choices-container { display: flex; gap: 15px; }
 
-      .choice-btn {
-        padding: 12px 24px;
-        background: #000; color: #fff;
-        border: none; cursor: pointer; font-size: 1.1rem;
-      }
-    </style>
-  </head>
-  <body>
+    .choice-btn {
+      padding: 12px 24px;
+      background: #000; color: #fff;
+      border: 2px solid #000; cursor: pointer; font-size: 1.1rem;
+      transition: all 0.2s;
+    }
+    .choice-btn:hover {
+      background: #fff;
+      color: #000;
+    }
+  </style>
+</head>
+<body>
 
-   <div id="intro-overlay" onclick="nextIntro()">
-  <img id="intro-img" src="" style="max-width: 80%; max-height: 60%; margin-bottom: 20px; display: none; transition: opacity 0.5s ease;">
-  
-  <div class="intro-text" id="intro-content">內容載入中...</div>
-  <div class="click-hint">點擊螢幕繼續</div>
-</div>
+  <div id="intro-overlay" onclick="nextIntro()">
+    <img id="intro-img" src="" style="max-width: 80%; max-height: 60%; margin-bottom: 20px; display: none; transition: opacity 0.5s ease;">
+    <div class="intro-text" id="intro-content">內容載入中...</div>
+    <div class="click-hint">點擊螢幕繼續</div>
+  </div>
 
-    <main class="game-container" id="game-main">
-      <div class="location-tag" id="location">地區名稱</div>
+  <main class="game-container" id="game-main">
+    <div class="location-tag" id="location">地區名稱</div>
+    <div class="character-sprite">
+      <img id="char-img" src="" alt="角色">
+    </div>
+    <section class="dialogue-bar">
+      <div class="speaker-name" id="speaker">說話者</div>
+      <div class="dialogue-text" id="dialogue">內容...</div>
+      <div class="choices-container" id="choices"></div>
+    </section>
+  </main>
 
-      <div class="character-sprite">
-        <img id="char-img" src="" alt="角色">
-      </div>
-
-      <section class="dialogue-bar">
-        <div class="speaker-name" id="speaker">說話者</div>
-        <div class="dialogue-text" id="dialogue">內容...</div>
-        <div class="choices-container" id="choices"></div>
-      </section>
-    </main>
-
-    <script>
-      // --- 前情提要設定 ---
-      const introLines = [
-        { text: "", img: "photo.png" }, // 第一格放工作室圖片
-        { text: "機智楊老生活逃離勞改營製作小組出品", img: "" },
-        { text: "這是一段不為人知的故事...", img: "" },
-        { text: "在這裡，自由是奢侈的空氣。", img: "" },
-        { text: "你能活著離開這裡嗎？", img: "" }
-      ];
-      let currentIntroIndex = 0;
-
-      function nextIntro() {
-        const content = document.getElementById('intro-content');
-        const introImg = document.getElementById('intro-img');
-  
-        // 先讓內容淡出
-        content.style.opacity = 0;
-        introImg.style.opacity = 0;
-
-        setTimeout(() => {
-          currentIntroIndex++; // 點擊後增加索引
+  <script>
+    const introLines = [
+      { text: "機智楊老生活：逃離勞改營", img: "https://via.placeholder.com/800x400/333/fff?text=STUDIO+LOGO" },
+      { text: "這是一段不為人知的故事...", img: "" },
+      { text: "在這裡，自由是奢侈的空氣。", img: "" },
+      { text: "你能活著離開這裡嗎？", img: "" }
+    ];
     
-          if (currentIntroIndex < introLines.length) {
-            const currentData = introLines[currentIntroIndex];
+    let currentIntroIndex = 0;
 
-            // 處理文字
-            content.textContent = currentData.text;
-            content.style.opacity = 1;
+    function nextIntro() {
+      const content = document.getElementById('intro-content');
+      const introImg = document.getElementById('intro-img');
 
-            // 處理圖片
-            if (currentData.img !== "") {
-              introImg.src = currentData.img;
-              introImg.style.display = "block";
-              setTimeout(() => { introImg.style.opacity = 1; }, 50); // 微調淡入感
-            } else {
-              introImg.style.display = "none";
-            }
+      content.style.opacity = 0;
+      introImg.style.opacity = 0;
+
+      setTimeout(() => {
+        currentIntroIndex++;
+        if (currentIntroIndex < introLines.length) {
+          const currentData = introLines[currentIntroIndex];
+          content.textContent = currentData.text;
+          content.style.opacity = 1;
+
+          if (currentData.img !== "") {
+            introImg.src = currentData.img;
+            introImg.style.display = "block";
+            setTimeout(() => { introImg.style.opacity = 1; }, 50);
           } else {
-            // 講完了，進入遊戲
-            document.getElementById('intro-overlay').style.display = 'none';
-            document.getElementById('game-main').style.display = 'block';
-            renderNode('start');
+            introImg.style.display = "none";
           }
-        }, 500);
+        } else {
+          document.getElementById('intro-overlay').style.display = 'none';
+          document.getElementById('game-main').style.display = 'block';
+          renderNode('start');
+        }
+      }, 500);
+    }
+
+    window.onload = () => {
+      const firstData = introLines[0];
+      document.getElementById('intro-content').textContent = firstData.text;
+      if (firstData.img !== "") {
+        const img = document.getElementById('intro-img');
+        img.src = firstData.img;
+        img.style.display = "block";
+        img.style.opacity = 1;
       }
+    };
 
-      // 初始啟動：因為我們點擊才換下一張，所以第一張要先手動呼叫顯示
-      window.onload = () => {
-        const firstData = introLines[0];
-        const content = document.getElementById('intro-content');
-        const introImg = document.getElementById('intro-img');
-
-        content.textContent = firstData.text;
-        if (firstData.img !== "") {
-          introImg.src = firstData.img;
-          introImg.style.display = "block";
-          introImg.style.opacity = 1;
-        }
-      };
-
-      // --- 遊戲邏輯設定 ---
-      const nodes = {
-        start: {
-          location: "勞改營入口",
-          speaker: "張教官",
-          text: "我是張教官，我是來告訴你們為什麼會來到這裡。",
-          charImg: "https://via.placeholder.com/400x600/22c55e/ffffff?text=張教官", // 換成你的綠色角色
-          choices: [{ text: "點擊繼續", next: "next1" }]
-        },
-        next1: {
-          location: "勞改營入口",
-          speaker: "張教官",
-          text: "因為你們違背我們偉大的楊主席的命令，所以你們要進來好好反省你們的罪過。",
-          charImg: "https://via.placeholder.com/400x600/22c55e/ffffff?text=張教官",
-          choices: [{ text: "點擊繼續", next: "next2" }]
-        }
-        next2: {
-          location: "勞改營入口",
-          speaker: "張教官",
-          text: "我們現在來講新疆勞改營宣言，我念一遍，你念一遍。",
-          charImg: "https://via.placeholder.com/400x600/22c55e/ffffff?text=張教官",
-          choices: [
-            { text: "跟著念", next: "speak" },
-            { text: "含糊帶過", next: "speaklittle" },
-            { text: "不念", next: "nospeak" }
-          ]
-        }
-        speak: {
-          location: "勞改營入口",
-          speaker: "張教官",
-          text: "很好，相信你們都清楚這裡的規則了，是時候該進去了，後會有期。",
-          charImg: "https://via.placeholder.com/400x600/22c55e/ffffff?text=張教官",
-          choices: [
-            { text: "進入勞改營", next: "story1" },
-            { text: "不要動作", next: "nomove" }
-          ]
-        }
-      };
-
-      function renderNode(nodeId) {
-        const node = nodes[nodeId];
-        document.getElementById('location').textContent = node.location;
-        document.getElementById('speaker').textContent = node.speaker;
-        document.getElementById('dialogue').textContent = node.text;
-        document.getElementById('char-img').src = node.charImg;
-
-        const choicesEl = document.getElementById('choices');
-        choicesEl.innerHTML = "";
-        node.choices.forEach(choice => {
-          const btn = document.createElement('button');
-          btn.className = "choice-btn";
-          btn.textContent = choice.text;
-          btn.onclick = () => renderNode(choice.next);
-          choicesEl.appendChild(btn);
-        });
+    // --- 遊戲劇情資料節點 ---
+    const nodes = {
+      start: {
+        location: "勞改營入口",
+        speaker: "張教官",
+        text: "我是張教官，我是來告訴你們為什麼會來到這裡。",
+        charImg: "https://via.placeholder.com/400x600/22c55e/ffffff?text=張教官",
+        choices: [{ text: "點擊繼續", next: "next1" }]
+      },
+      next1: {
+        location: "勞改營入口",
+        speaker: "張教官",
+        text: "因為你們違背我們偉大的楊主席的命令，所以你們要進來好好反省你們的罪過。",
+        charImg: "https://via.placeholder.com/400x600/22c55e/ffffff?text=張教官",
+        choices: [{ text: "點擊繼續", next: "next2" }]
+      }, // 注意這裡原本少了逗號
+      next2: {
+        location: "勞改營入口",
+        speaker: "張教官",
+        text: "我們現在來講新疆勞改營宣言，我念一遍，你念一遍。",
+        charImg: "https://via.placeholder.com/400x600/22c55e/ffffff?text=張教官",
+        choices: [
+          { text: "跟著念", next: "speak" },
+          { text: "含糊帶過", next: "speaklittle" },
+          { text: "不念", next: "nospeak" }
+        ]
+      }, // 注意這裡原本少了逗號
+      speak: {
+        location: "勞改營入口",
+        speaker: "張教官",
+        text: "很好，相信你們都清楚這裡的規則了，是時候該進去了，後會有期。",
+        charImg: "https://via.placeholder.com/400x600/22c55e/ffffff?text=張教官",
+        choices: [
+          { text: "進入勞改營", next: "story1" },
+          { text: "不要動作", next: "nomove" }
+        ]
+      },
+      speaklittle: {
+        location: "勞改營入口",
+        speaker: "張教官",
+        text: "沒吃飯嗎？大聲點！不過算了，進去後有的是時間調教你。",
+        charImg: "https://via.placeholder.com/400x600/22c55e/ffffff?text=張教官",
+        choices: [{ text: "沉重地走進去", next: "story1" }]
+      },
+      nospeak: {
+        location: "勞改營入口",
+        speaker: "張教官",
+        text: "居然敢保持沉默？看來你是個硬骨頭。警衛！把他拖進去！",
+        charImg: "https://via.placeholder.com/400x600/ef4444/ffffff?text=憤怒的張教官",
+        choices: [{ text: "被強行拖走", next: "story1" }]
+      },
+      nomove: {
+        location: "勞改營入口",
+        speaker: "張教官",
+        text: "還站在那邊幹什麼？想吃子彈嗎？快滾進去！",
+        charImg: "https://via.placeholder.com/400x600/22c55e/ffffff?text=張教官",
+        choices: [{ text: "迫於威脅進入", next: "story1" }]
+      },
+      story1: {
+        location: "牢房",
+        speaker: "旁白",
+        text: "重重的鐵門在身後關上。這裡是你的新家，編號 9527。",
+        charImg: "https://via.placeholder.com/400x600/666666/ffffff?text=陰暗的牢房",
+        choices: [{ text: "待續...", next: "start" }]
       }
-    </script>
-  </body>
+    };
+
+    function renderNode(nodeId) {
+      const node = nodes[nodeId];
+      if (!node) return;
+
+      document.getElementById('location').textContent = node.location;
+      document.getElementById('speaker').textContent = node.speaker;
+      document.getElementById('dialogue').textContent = node.text;
+      document.getElementById('char-img').src = node.charImg;
+
+      const choicesEl = document.getElementById('choices');
+      choicesEl.innerHTML = "";
+      node.choices.forEach(choice => {
+        const btn = document.createElement('button');
+        btn.className = "choice-btn";
+        btn.textContent = choice.text;
+        btn.onclick = () => renderNode(choice.next);
+        choicesEl.appendChild(btn);
+      });
+    }
+  </script>
+</body>
 </html>
