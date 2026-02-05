@@ -164,7 +164,7 @@
     let currentIntroIndex = 0;
     let isTyping = false; // 標記目前是否正在打字中
 
-     function typeWriter(element, text, speed = 10) {//速度100
+     function typeWriter(element, text, speed = 100) {
       let i = 0;
       element.textContent = "";
       isTyping = true; // 開始打字，鎖定點擊
@@ -211,7 +211,7 @@
 
           // 處理文字（打字機效果）
           content.style.opacity = 1;
-          typeWriter(content, currentData.text, 150); // 150ms 是打字速度，可調整
+          typeWriter(content, currentData.text, 100); // 100ms 是打字速度，可調整
 
         } else {
           // 講完了，進入遊戲
@@ -235,7 +235,7 @@
       }
   
       // 第一段文字也使用打字機
-      typeWriter(content, firstData.text, 150);
+      typeWriter(content, firstData.text, 100);
     };
 
     // --- 遊戲劇情資料節點 ---
