@@ -366,8 +366,8 @@
         ]
       },
       check_bed: {
-        location: "牢房",
-        speaker: "系統",
+        location: "房間",
+        speaker: "旁白",
         text: "你在床板下發現了一根生鏽的鐵絲。",
         charImg: "",
         action: () => { 
@@ -376,18 +376,18 @@
         choices: [{ text: "收起來", next: "story1" }]
       },
       bribe_success: {
-        location: "牢房門口",
+        location: "房門口",
         speaker: "守衛",
         text: "算你識相，這把鑰匙你拿著，晚上安分點。",
         charImg: "guard.png",
         action: () => { playerState.inventory.push("後門鑰匙"); },
-        choices: [{ text: "回到牢房", next: "story1" }]
+        choices: [{ text: "收起來", next: "story1" }]
       },
       game_over_credit: {
         location: "勞改營陰暗的角落",
         speaker: "士兵",
         text: "你的被主席認定為無法教化的人，你在統一上是一個很大的阻礙，都給你這麼多次機會了，看來你不想活了，那讓我助你一臂之力吧。",
-        charImg: "",
+        charImg: "Gemini_Generated_Image_suylcdsuylcdsuyl.png",
         choices: [{ text: "重新開始", next: "reset_game" }]
       }
     };
