@@ -6,15 +6,22 @@
   <title>逃離勞改營</title>
   <style>
     :root {
+      /* 1. 修改背景顏色/圖片 */
       --bg-color: #0b1120; 
+      /* 如果你要換成自己畫的背景圖，取消下面這行的註解並換上檔名 */
+      /* --bg-image: url('your_background.jpg'); */
     }
 
     body, html {
       margin: 0; padding: 0;
       width: 100%; height: 100%;
       overflow: hidden;
-      background-color: #000;
-      font-family: "Microsoft JhengHei", "PingFang TC", sans-serif;
+      background-color: var(--bg-color);
+      /* 讓背景圖全螢幕覆蓋且置中 */
+      background-image: var(--bg-image);
+      background-size: cover;
+      background-position: center;
+      font-family: "Microsoft JhengHei", sans-serif;
     }
 
     /* --- 前情動畫層 --- */
@@ -55,61 +62,73 @@
       0%, 100% { opacity: 0; }
       50% { opacity: 1; }
     }
-
-    /* --- 主遊戲畫面 --- */
+  /* --- 主遊戲畫面佈局修正 --- */
     .game-container {
       position: relative;
       width: 100vw; height: 100vh;
-      background: var(--bg-color);
       display: none;
+      /* 這裡也可以單獨設定背景 */
+      background-image: var(--bg-image);
+      background-size: cover;
+      background-position: center;
     }
 
-    .location-tag {
-      position: absolute;
-      top: 30px; right: 30px;
-      background: #ef4444;
-      color: white;
-      padding: 10px 25px;
-      font-size: 1.5rem;
-      font-weight: bold;
-      border-radius: 8px;
-      z-index: 100;
-    }
-
+    /* 2. 人物放大邏輯 */
     .character-sprite {
       position: absolute;
-      bottom: 250px;
-      left: 10%;
-      width: 350px;
+      /* 改用高度控制，讓人物底部貼齊對話框 */
+      bottom: 250px; 
+      left: 50%;
+      transform: translateX(-50%); /* 讓人物水平置中，像立繪一樣 */
+      height: calc(100vh - 280px); /* 動態計算高度：總高減去對話框高度 */
       z-index: 10;
+      display: flex;
+      justify-content: center;
     }
-    .character-sprite img { width: 100%; }
 
-    /* 黃色對話框區 */
+    .character-sprite img { 
+      height: 100%; /* 強制圖片高度撐滿容器 */
+      width: auto;  /* 寬度隨比例縮放，不會變形 */
+      filter: drop-shadow(0 10px 20px rgba(0,0,0,0.5)); /* 加上陰影讓人物更立體 */
+    }
+
+    /* 3. 對話框與配色修正 (參考截圖) */
     .dialogue-bar {
       position: absolute;
       bottom: 0; left: 0;
       width: 100%; height: 250px;
-      background: #111827;
-      border-top: 5px solid #000;
-      padding: 30px;
+      background: #111827; /* 深色背景 */
+      border-top: 1px solid rgba(255,255,255,0.1); /* 纖細的邊框線 */
+      padding: 30px 60px; /* 增加左右內距更像截圖 */
       box-sizing: border-box;
       z-index: 50;
+      box-shadow: 0 -10px 30px rgba(0,0,0,0.5);
+    }
+  
+    .speaker-name { 
+      font-size: 1.3rem; 
+      font-weight: bold; 
+      margin-bottom: 12px; 
+      color: #f97316; /* 橘色名字 */
     }
 
-    .speaker-name { font-size: 1.6rem; font-weight: bold; margin-bottom: 10px; color: #cbd5e1; }
-    .dialogue-text { font-size: 1.4rem; line-height: 1.6; margin-bottom: 20px; color: #cbd5e1; }
-    .choices-container { display: flex; gap: 15px; }
+    .dialogue-text { 
+      font-size: 1.2rem; 
+      line-height: 1.8; 
+      margin-bottom: 25px; 
+      color: #e2e8f0; /* 淺灰白字 */
+    }
 
+    /* 4. 選項按鈕修正 (參考截圖) */
     .choice-btn {
-      padding: 12px 24px;
-      background: #6366f1; color: #fff;
-      border: 2px solid #000; cursor: pointer; font-size: 1.1rem;
+      padding: 10px 24px;
+      background: #6366f1; /* 亮紫色 */
+      color: #fff;
+      border: none; 
+      border-radius: 6px; /* 加上圓角 */
+      cursor: pointer; 
+      font-size: 1rem;
       transition: all 0.2s;
-    }
-    .choice-btn:hover {
-      background: #fff;
-      color: #000;
     }
   </style>
 </head>
@@ -293,8 +312,14 @@
       document.getElementById('location').textContent = node.location;
       document.getElementById('speaker').textContent = node.speaker;
       document.getElementById('dialogue').textContent = node.text;
-      document.getElementById('char-img').src = node.charImg;
-
+  
+      const charImg = document.getElementById('char-img');
+      if (node.charImg && node.charImg !== "") {
+        charImg.src = node.charImg;
+        charImg.style.display = "block";
+      } else {
+        charImg.style.display = "none"; // 如果該節點沒圖（如旁白時）就隱藏
+      }
       const choicesEl = document.getElementById('choices');
       choicesEl.innerHTML = "";
       node.choices.forEach(choice => {
