@@ -381,8 +381,12 @@
         speaker: "守衛",
         text: "算你識相，這把鑰匙你拿著，晚上安分點。",
         charImg: "Gemini_Generated_Image_suylcdsuylcdsuyl.png",
-        action: () => { playerState.money -= 50; },
-        action: () => { playerState.inventory.push("後門鑰匙"); },
+        action: () => {
+            playerState.money -= 50; // 扣錢
+            if(!playerState.inventory.includes("後門鑰匙")) {
+             playerState.inventory.push("後門鑰匙"); // 給鑰匙
+            }
+        },
         choices: [{ text: "收起來", next: "story1" }]
       },
       game_over_credit: {
