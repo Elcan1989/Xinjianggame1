@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>對話遊戲：點擊前情版</title>
+    <title>逃離勞改營</title>
     <style>
       :root {
         --bg-color: #2563eb; /* 你的藍色背景 */
@@ -133,7 +133,10 @@
     <script>
       // --- 前情提要設定 ---
       const introLines = [
+        { text: "本遊戲可能會引起某些人的不適", img: "" },
+        { text: "若有不適請立即關閉此遊戲", img: "" },
         { text: "", img: "photo.png" }, // 第一格放工作室圖片
+        { text: "機智楊老生活逃離勞改營製作小組出品", img: "" },
         { text: "這是一段不為人知的故事...", img: "" },
         { text: "在這裡，自由是奢侈的空氣。", img: "" },
         { text: "你能活著離開這裡嗎？", img: "" }
@@ -194,16 +197,37 @@
         start: {
           location: "勞改營入口",
           speaker: "張教官",
-          text: "我是張教官，歡迎來到這裡反省。",
+          text: "我是張教官，我是來告訴你們為什麼會來到這裡。",
           charImg: "https://via.placeholder.com/400x600/22c55e/ffffff?text=張教官", // 換成你的綠色角色
           choices: [{ text: "點擊繼續", next: "next1" }]
         },
         next1: {
-          location: "勞改營內部",
+          location: "勞改營入口",
           speaker: "張教官",
-          text: "現在，開始你第一天的勞動。",
+          text: "因為你們違背我們偉大的楊主席的命令，所以你們要進來好好反省你們的罪過。",
           charImg: "https://via.placeholder.com/400x600/22c55e/ffffff?text=張教官",
-          choices: [{ text: "重新開始遊戲", next: "start" }]
+          choices: [{ text: "點擊繼續", next: "next2" }]
+        }
+        next2: {
+          location: "勞改營入口",
+          speaker: "張教官",
+          text: "我們現在來講新疆勞改營宣言，我念一遍，你念一遍。",
+          charImg: "https://via.placeholder.com/400x600/22c55e/ffffff?text=張教官",
+          choices: [
+            { text: "跟著念", next: "speak" },
+            { text: "含糊帶過", next: "speaklittle" },
+            { text: "不念", next: "nospeak" }
+          ]
+        }
+        speak: {
+          location: "勞改營入口",
+          speaker: "張教官",
+          text: "很好，相信你們都清楚這裡的規則了，是時候該進去了，後會有期。",
+          charImg: "https://via.placeholder.com/400x600/22c55e/ffffff?text=張教官",
+          choices: [
+            { text: "進入勞改營", next: "story1" },
+            { text: "不要動作", next: "nomove" }
+          ]
         }
       };
 
