@@ -9,7 +9,7 @@
       /* 1. 修改背景顏色/圖片 */
       --bg-color: #0b1120; 
       /* 如果你要換成自己畫的背景圖，取消下面這行的註解並換上檔名 */
-      /* --bg-image: url('your_background.jpg'); */
+       --bg-image: url('ChatGPT Image 2026年2月5日 上午11_55_39.png'); 
     }
 
     body, html {
@@ -109,7 +109,7 @@
       font-size: 1.3rem; 
       font-weight: bold; 
       margin-bottom: 12px; 
-      color: #f97316; /* 橘色名字 */
+      color: #e2e8f0; /* 淺灰白名字 */
     }
 
     .dialogue-text { 
@@ -181,13 +181,15 @@
   <script>
     // --- 玩家狀態資料 ---
     let playerState = {
-      credit: 1,      // 初始信用值
+      credit: 3,      // 初始信用值
       money: 100,     // 初始金錢
       inventory: [],  // 道具區
       quests: []      // 任務區
     };
 
     const introLines = [
+      { text: "本遊戲可能會引起某些人的不適", img: "" },
+      { text: "有不適請立即關閉此遊戲", img: "" },
       { text: "機智楊老生活：逃離勞改營", img: "photo.png" },
       { text: "機智楊老生活逃離勞改營製作小組出品", img: "" },
       { text: "這是一段不為人知的故事...", img: "" },
@@ -290,7 +292,7 @@
         text: "因為你們違背我們偉大的楊主席的命令，所以你們要進來好好反省你們的罪過。",
         charImg: "chang.png",
         choices: [{ text: "點擊繼續", next: "next2" }]
-      }, // 注意這裡原本少了逗號
+      },
       next2: {
         location: "勞改營入口",
         speaker: "張教官",
@@ -299,14 +301,15 @@
         choices: [
           { text: "跟著念", next: "speak" },
           { text: "含糊帶過", next: "speaklittle" },
-          { text: "不念 (信用值扣除)", next: "nospeak" }
+          { text: "不念 ", next: "nospeak" }
         ]
-      }, // 注意這裡原本少了逗號
+      },
       speak: {
         location: "勞改營入口",
         speaker: "張教官",
         text: "很好，相信你們都清楚這裡的規則了，是時候該進去了，後會有期。",
         charImg: "chang.png",
+        action: () => { playerState.credit += 1; }, // 信用值增加
         choices: [
           { text: "進入勞改營", next: "story1" },
           { text: "不要動作", next: "nomove" }
@@ -315,29 +318,41 @@
       speaklittle: {
         location: "勞改營入口",
         speaker: "張教官",
-        text: "沒吃飯嗎？大聲點！不過算了，進去後有的是時間調教你。",
+        text: "念大聲一點啦，我一個人都比你們念的大聲了。",
         charImg: "chang.png",
-        choices: [{ text: "沉重地走進去", next: "story1" }]
+        action: () => { playerState.credit -= 1; }, // 信用值扣除
+        choices: [{ text: "點擊繼續", next: "next3" }]
+      },
+      next3: {
+        location: "勞改營入口",
+        speaker: "張教官",
+        text: "我再給你們一次機會",
+        charImg: "chang.png",
+        choices: [
+          { text: "跟著念", next: "speak" },
+          { text: "不念 ", next: "nospeak" }
+        ]
       },
       nospeak: {
         location: "勞改營入口",
         speaker: "張教官",
-        text: "居然敢保持沉默？看來你是個硬骨頭。警衛！把他拖進去！",
+        text: "還嫌我不夠兇嗎，第一天進來就要造反嗎?",
         charImg: "chang.png",
-        action: () => { playerState.credit -= 1; }, // 信用值扣除
-        choices: [{ text: "被強行拖走", next: "story1" }]
+        action: () => { playerState.credit -= 2; }, // 信用值扣除
+        choices: [{ text: "點擊繼續", next: "next3" }]
       },
       nomove: {
         location: "勞改營入口",
         speaker: "張教官",
-        text: "還站在那邊幹什麼？想吃子彈嗎？快滾進去！",
+        text: "還站在那邊幹什麼？我說什麼就是什麼!",
         charImg: "chang.png",
-        choices: [{ text: "迫於威脅進入", next: "story1" }]
+        action: () => { playerState.credit -= 1; }, // 信用值扣除
+        choices: [{ text: "進入勞改營", next: "story1" }]
       },
       story1: {
-        location: "牢房",
+        location: "勞改營內",
         speaker: "旁白",
-        text: "重重的鐵門在身後關上。這裡是你的新家，編號 9527。你想做什麼？",
+        text: "你暫時都會住在這裡了，為了長久之計，你該怎麼做?",
         charImg: "",
         choices: [
           { text: "檢查床鋪", next: "check_bed" },
@@ -369,9 +384,9 @@
         choices: [{ text: "回到牢房", next: "story1" }]
       },
       game_over_credit: {
-        location: "小黑屋",
-        speaker: "系統",
-        text: "你的信用值歸零。你被判定為無法改造的廢料，已遭到清理。",
+        location: "勞改營陰暗的角落",
+        speaker: "士兵",
+        text: "你的被主席認定為無法教化的人，你在統一上是一個很大的阻礙，都給你這麼多次機會了，看來你不想活了，那讓我助你一臂之力吧。",
         charImg: "",
         choices: [{ text: "重新開始", next: "reset_game" }]
       }
