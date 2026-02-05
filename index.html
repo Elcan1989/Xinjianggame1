@@ -362,7 +362,6 @@
             text: "賄賂守衛 ($50)", 
             next: "bribe_success", 
             condition: () => playerState.money >= 50,
-            action: () => { playerState.money -= 50; }
           },
           { text: "休息", next: "start" }
         ]
@@ -382,6 +381,7 @@
         speaker: "守衛",
         text: "算你識相，這把鑰匙你拿著，晚上安分點。",
         charImg: "guard.png",
+        action: () => { playerState.money -= 50; },
         action: () => { playerState.inventory.push("後門鑰匙"); },
         choices: [{ text: "收起來", next: "story1" }]
       },
@@ -404,7 +404,7 @@
     function renderNode(nodeId) {
       // 處理重新開始
       if(nodeId === 'reset_game') {
-        playerState = { credit: 1, money: 100, inventory: [], quests: [] };
+        playerState = { credit: 3, money: 100, inventory: [], quests: [] };
         nodeId = 'start';
       }
 
