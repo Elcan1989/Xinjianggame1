@@ -288,35 +288,52 @@
       { text: "你能活著離開這裡嗎？", img: "" }
     ];
 
-    let currentIntroIndex = 0;
-    let isTyping = false; // 標記目前是否正在打字中
+    let fullText = ""; // 儲存當前節點的完整文字內容
+    let timer = null;  // 儲存計時器，方便清除
 
-     function typeWriter(element, text, speed = 100) {
-      let i = 0;
+    function typeWriter(element, text, speed = 50) {
+      // 初始化
+      clearInterval(timer);
+      fullText = text;
       element.textContent = "";
-      isTyping = true; // 開始打字，鎖定點擊
+      isTyping = true;
+  
+      const hint = document.querySelector('.click-hint');
+      if(hint) hint.style.opacity = 0; // 開始打字時隱藏提示
 
-      const timer = setInterval(() => {
+      let i = 0;
+      timer = setInterval(() => {
         if (i < text.length) {
           element.textContent += text.charAt(i);
           i++;
         } else {
-          clearInterval(timer);
-          isTyping = false; // 打字完成，解除鎖定
-          const hint = document.querySelector('.click-hint');
-          if(hint) hint.style.opacity = 1; // 顯示提示文字
+          finishTyping(element);
         }
       }, speed);
     }
 
-    function nextIntro() {
-      // 如果正在打字，則不允許點擊下一頁
-      if (isTyping) return;
-
-      const content = document.getElementById('intro-content');
-      const introImg = document.getElementById('intro-img');
+    // 結束打字的統一處理
+    function finishTyping(element) {
+      clearInterval(timer);
+      element.textContent = fullText; // 確保文字完整
+      isTyping = false;
+  
       const hint = document.querySelector('.click-hint');
+      if(hint) hint.style.opacity = 1; // 顯示提示文字
+    }
 
+    // 新增：處理點擊對話框的跳過邏輯
+    function handleDialogueClick() {
+      const dialogueEl = document.getElementById('dialogue');
+      if (isTyping) {
+        // 如果正在打字，立即結束並顯示全部文字
+        finishTyping(dialogueEl);
+      } else {
+        // 如果已經打完字，這裡可以視需求決定是否觸發「下一步」
+        // 通常在有「選項按鈕」的情況下，點擊文字區塊不執行動作
+        console.log("文字已顯示完畢，等待玩家點選按鈕");
+      }
+    }
       // 先讓內容淡出
       content.style.opacity = 0;
       introImg.style.opacity = 0;
