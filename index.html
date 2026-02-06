@@ -469,7 +469,7 @@
         text: "這是給你的獎勵。",
         charImg: "Feng.png",
         bg:"cotton fields.png",
-        action: () => { playerState.money += 50; },
+        action: () => { playerState.money += 100; },
         choices: [
           { text: "回房間", next: "story2" }]
       },
@@ -487,7 +487,25 @@
         text: "沒關係。",
         charImg: "Feng.png",
         bg:"cotton fields.png",
-        choices: [{ text: "點擊繼續", next: "next6" }]
+        choices: [{ text: "點擊繼續", next: "next7" }]
+      },
+      next6: {
+        location: "棉花田",
+        speaker: "馮教官",
+        text: "你還是有獎勵。",
+        charImg: "Feng.png",
+        bg:"cotton fields.png",
+        action: () => { playerState.money += 50; },
+        choices: [{ text: "回房間", next: "story2" }]
+      },
+      nomove2: {
+        location: "棉花田",
+        speaker: "馮教官",
+        text: "你站在這邊幹嘛，我很帥嗎?",
+        charImg: "Feng.png",
+        bg:"cotton fields.png",
+        action: () => { playerState.credit -= 1; },
+        choices: [{ text: "回房間", next: "story2" }]
       },
       game_over_credit: {
         location: "勞改營陰暗的角落",
