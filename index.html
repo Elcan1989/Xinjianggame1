@@ -212,6 +212,10 @@
         <div><span class="hud-label">金錢:</span> <span class="hud-value">$<span id="ui-money">0</span></span></div>
         <div style="grid-column: span 2;"><span class="hud-label">當前任務:</span> <span id="ui-quest" class="quest-tag">無</span></div>
       </div>
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 15px;">
+        <button onclick="saveGame()" style="padding:10px; background:#10b981; border:none; color:white; cursor:pointer; border-radius:4px;">💾 儲存進度</button>
+        <button onclick="loadGame()" style="padding:10px; background:#6366f1; border:none; color:white; cursor:pointer; border-radius:4px;">📂 讀取進度</button>
+      </div>
       <div class="item-grid" id="item-grid"></div>
       <button onclick="toggleInventory()" style="width:100%; margin-top:20px; padding:10px; background:#475569; border:none; color:white; cursor:pointer; border-radius:4px;">返回遊戲</button>
     </div>
