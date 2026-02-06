@@ -388,7 +388,7 @@
       nomove: {
         location: "勞改營入口",
         speaker: "張教官",
-        text: "還站在那邊幹什麼？我說什麼就是什麼！帶走！",
+        text: "還站在那邊幹什麼？我說什麼就是什麼！",
         charImg: "chang.png",
         bg:"ChatGPT Image 2026年2月5日 上午11_55_39.png",
         action: () => { playerState.credit -= 1; },
@@ -453,6 +453,41 @@
           { text: "採很多", next: "many" },
           { text: "偷懶一下，只採一點", next: "little" },
           { text: "不動", next: "nomove2" }]
+      },
+      many: {
+        location: "棉花田",
+        speaker: "馮教官",
+        text: "正確答案，採這麼多棉花就可以讓國家賺很多錢。",
+        charImg: "Feng.png",
+        bg:"cotton fields.png",
+        action: () => { playerState.credit += 1; },
+        choices: [{ text: "點擊繼續", next: "next5" }]
+      },
+      many: {
+        location: "棉花田",
+        speaker: "馮教官",
+        text: "這是給你的獎勵。",
+        charImg: "Feng.png",
+        bg:"cotton fields.png",
+        action: () => { playerState.money += 50; },
+        choices: [
+          { text: "回房間", next: "story2" }]
+      },
+      little: {
+        location: "棉花田",
+        speaker: "馮教官",
+        text: "你們會不會有點太偷懶了。",
+        charImg: "Feng.png",
+        bg:"cotton fields.png",
+        choices: [{ text: "點擊繼續", next: "next6" }]
+      },
+      next6: {
+        location: "棉花田",
+        speaker: "馮教官",
+        text: "沒關係。",
+        charImg: "Feng.png",
+        bg:"cotton fields.png",
+        choices: [{ text: "點擊繼續", next: "next6" }]
       },
       game_over_credit: {
         location: "勞改營陰暗的角落",
