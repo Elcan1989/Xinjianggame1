@@ -291,7 +291,6 @@
         return;
       }
 
-      // 每次點擊增加索引
       currentIntroIndex++;
 
       if (currentIntroIndex < introLines.length) {
@@ -457,42 +456,16 @@
       many: {
         location: "棉花田",
         speaker: "馮教官",
-        text: "正確答案，採這麼多棉花就可以讓國家賺很多錢。",
+        text: "正確答案，採這麼多棉花就可以讓國家賺很多錢。這是給你的獎勵。",
         charImg: "Feng.png",
         bg:"cotton fields.png",
-        action: () => { playerState.credit += 1; },
-        choices: [{ text: "點擊繼續", next: "next5" }]
-      },
-      many: {
-        location: "棉花田",
-        speaker: "馮教官",
-        text: "這是給你的獎勵。",
-        charImg: "Feng.png",
-        bg:"cotton fields.png",
-        action: () => { playerState.money += 100; },
-        choices: [
-          { text: "回房間", next: "story2" }]
+        action: () => { playerState.credit += 1; playerState.money += 100; },
+        choices: [{ text: "回房間", next: "story2" }]
       },
       little: {
         location: "棉花田",
         speaker: "馮教官",
-        text: "你們會不會有點太偷懶了。",
-        charImg: "Feng.png",
-        bg:"cotton fields.png",
-        choices: [{ text: "點擊繼續", next: "next6" }]
-      },
-      next6: {
-        location: "棉花田",
-        speaker: "馮教官",
-        text: "沒關係。",
-        charImg: "Feng.png",
-        bg:"cotton fields.png",
-        choices: [{ text: "點擊繼續", next: "next7" }]
-      },
-      next6: {
-        location: "棉花田",
-        speaker: "馮教官",
-        text: "你還是有獎勵。",
+        text: "你們會不會有點太偷懶了。沒關係，你還是有獎勵。",
         charImg: "Feng.png",
         bg:"cotton fields.png",
         action: () => { playerState.money += 50; },
@@ -507,14 +480,14 @@
         action: () => { playerState.credit -= 1; },
         choices: [{ text: "回房間", next: "story2" }]
       },
-      story2": {
+      story2: {
         location: "房間",
         speaker: "旁白",
         text: "又到了睡覺時間",
         charImg: "",
         bg:"ChatGPT Image 2026年2月5日 上午11_55_39.png",
-        choices: [{ text: "回房間", next: "story2" }]
-      }
+        choices: [{ text: "繼續遊戲", next: "start" }]
+      },
       game_over_credit: {
         location: "勞改營陰暗的角落",
         speaker: "士兵",
@@ -554,7 +527,7 @@
         nodeId = 'start';
       }
 
-      playerState.currentNode = nodeId; // 記錄當前位置以供存檔
+      playerState.currentNode = nodeId; 
       const node = nodes[nodeId];
       if (!node) return;
 
@@ -564,6 +537,11 @@
       if (playerState.credit <= 0 && nodeId !== 'game_over_credit') {
         renderNode('game_over_credit');
         return;
+      }
+
+      // 切換背景圖
+      if (node.bg) {
+        document.getElementById('game-main').style.backgroundImage = `url('${node.bg}')`;
       }
 
       document.getElementById('location').textContent = node.location;
@@ -598,11 +576,8 @@
     }
 
     window.onload = () => {
-      // 初始化第一條內容
       typeWriter(document.getElementById('intro-content'), introLines[0].text);
     };
-
-    // --- 存讀檔功能 ---
 
     function saveGame() {
       try {
@@ -610,31 +585,27 @@
         localStorage.setItem('escape_labor_camp_save', saveData);
         alert("進度已儲存！");
       } catch (e) {
-        console.error("存檔失敗", e);
-        alert("存檔失敗，請確認瀏覽器權限。");
+        alert("存檔失敗。");
       }
     }
     
     function loadGame() {
       const saveData = localStorage.getItem('escape_labor_camp_save');
-  
       if (!saveData) {
         alert("找不到任何存檔！");
         return;
       }
-
       try {
-        const loadedState = JSON.parse(saveData);
-        playerState = loadedState;
-    
-        toggleInventory();
+        playerState = JSON.parse(saveData);
+        if (document.getElementById('inventory-panel').style.display === 'block') toggleInventory();
         renderNode(playerState.currentNode);
         alert("進度已載入！");
       } catch (e) {
-        console.error("讀檔失敗", e);
         alert("存檔檔案損毀。");
       }
     }
   </script>
+</body>
+</html>
 </body>
 </html>
