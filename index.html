@@ -413,7 +413,7 @@
         charImg: "",
         bg:"ChatGPT Image 2026年2月5日 上午11_55_39.png",
         action: () => { if(!playerState.inventory.includes("鐵絲")) playerState.inventory.push("鐵絲"); },
-        choices: [{ text: "收起來", next: "day1" }]
+        choices: [{ text: "收起來", next: "story1" }]
       },
       bribe_success: {
         location: "房門口",
@@ -425,7 +425,7 @@
           playerState.money -= 50;
           if(!playerState.inventory.includes("後門鑰匙")) playerState.inventory.push("後門鑰匙");
         },
-        choices: [{ text: "收起來", next: "day1" }]
+        choices: [{ text: "收起來", next: "story1" }]
       },
       day1: {
         location: "棉花田",
