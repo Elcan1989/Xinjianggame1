@@ -6,10 +6,8 @@
   <title>逃離勞改營</title>
   <style>
     :root {
-      /* 1. 修改背景顏色/圖片 */
       --bg-color: #0b1120; 
-      /* 如果你要換成自己畫的背景圖，取消下面這行的註解並換上檔名 */
-       --bg-image: url('ChatGPT Image 2026年2月5日 上午11_55_39.png'); 
+      --bg-image: url('ChatGPT Image 2026年2月5日 上午11_55_39.png'); 
     }
 
     body, html {
@@ -17,7 +15,6 @@
       width: 100%; height: 100%;
       overflow: hidden;
       background-color: var(--bg-color);
-      /* 讓背景圖全螢幕覆蓋且置中 */
       background-image: var(--bg-image);
       background-size: cover;
       background-position: center;
@@ -53,7 +50,7 @@
       bottom: 50px;
       font-size: 0.9rem;
       color: #666;
-      opacity: 0; /* 預設隱藏 */
+      opacity: 0; 
       transition: opacity 0.5s ease;
       animation: blink 2s infinite;
     }
@@ -62,44 +59,40 @@
       0%, 100% { opacity: 0; }
       50% { opacity: 1; }
     }
-  /* --- 主遊戲畫面佈局修正 --- */
+
     .game-container {
       position: relative;
       width: 100vw; height: 100vh;
       display: none;
-      /* 這裡也可以單獨設定背景 */
       background-image: var(--bg-image);
       background-size: cover;
       background-position: center;
     }
 
-    /* 2. 人物放大邏輯 */
     .character-sprite {
       position: absolute;
-      /* 改用高度控制，讓人物底部貼齊對話框 */
       bottom: 250px; 
       left: 50%;
-      transform: translateX(-50%); /* 讓人物水平置中，像立繪一樣 */
-      height: calc(100vh - 280px); /* 動態計算高度：總高減去對話框高度 */
+      transform: translateX(-50%);
+      height: calc(100vh - 280px);
       z-index: 10;
       display: flex;
       justify-content: center;
     }
 
     .character-sprite img { 
-      height: 100%; /* 強制圖片高度撐滿容器 */
-      width: auto;  /* 寬度隨比例縮放，不會變形 */
-      filter: drop-shadow(0 10px 20px rgba(0,0,0,0.5)); /* 加上陰影讓人物更立體 */
+      height: 100%;
+      width: auto; 
+      filter: drop-shadow(0 10px 20px rgba(0,0,0,0.5));
     }
 
-    /* 3. 對話框與配色修正 (參考截圖) */
     .dialogue-bar {
       position: absolute;
       bottom: 0; left: 0;
       width: 100%; height: 250px;
-      background: #111827; /* 深色背景 */
-      border-top: 1px solid rgba(255,255,255,0.1); /* 纖細的邊框線 */
-      padding: 30px 60px; /* 增加左右內距更像截圖 */
+      background: #111827;
+      border-top: 1px solid rgba(255,255,255,0.1);
+      padding: 30px 60px;
       box-sizing: border-box;
       z-index: 50;
       box-shadow: 0 -10px 30px rgba(0,0,0,0.5);
@@ -109,48 +102,33 @@
       font-size: 1.3rem; 
       font-weight: bold; 
       margin-bottom: 12px; 
-      color: #e2e8f0; /* 淺灰白名字 */
+      color: #e2e8f0;
     }
 
     .dialogue-text { 
       font-size: 1.2rem; 
       line-height: 1.8; 
       margin-bottom: 25px; 
-      color: #e2e8f0; /* 淺灰白字 */
+      color: #e2e8f0;
     }
 
-    /* 4. 選項按鈕修正 (參考截圖) */
     .choice-btn {
-      padding: 15px 30px;
-      background: #6366f1; /* 亮紫色 */
+      padding: 10px 25px;
+      background: #6366f1;
       color: #fff;
       border: none; 
-      border-radius: 6px; /* 加上圓角 */
+      border-radius: 6px;
       cursor: pointer; 
       font-size: 1rem;
       transition: all 0.2s;
       margin-right: 10px;
+      margin-top: 10px;
     }
 
-    /* 新增：玩家狀態 HUD 樣式 */
-    .hud-container {
-      position: absolute;
-      top: 20px;
-      left: 20px;
-      z-index: 100;
-      color: white;
-      background: rgba(0, 0, 0, 0.6);
-      padding: 15px;
-      border-radius: 8px;
-      font-size: 0.9rem;
-      border: 1px solid rgba(255,255,255,0.2);
+    .choice-btn:hover {
+        background: #4f46e5;
     }
-    .hud-item { margin-bottom: 5px; }
-    .hud-label { color: #94a3b8; margin-right: 5px; }
-    .hud-value { color: #fbbf24; font-weight: bold; }
-    .quest-tag { color: #10b981; }
 
-    /* 背包切換按鈕 */
     #bag-toggle {
       position: absolute;
       top: 20px;
@@ -165,7 +143,6 @@
       cursor: pointer;
     }
 
-    /* 背包面板主體 */
     #inventory-panel {
       position: fixed;
       top: 50%;
@@ -177,18 +154,9 @@
       border-radius: 12px;
       padding: 20px;
       z-index: 200;
-      display: none; /* 預設隱藏 */
+      display: none;
       color: white;
       box-shadow: 0 0 50px rgba(0,0,0,0.8);
-    }
-
-    .inv-header {
-      font-size: 1.5rem;
-      border-bottom: 1px solid #475569;
-      padding-bottom: 10px;
-      margin-bottom: 20px;
-      text-align: center;
-      color: #fbbf24;
     }
 
     .inv-stats {
@@ -201,6 +169,10 @@
       border-radius: 8px;
     }
 
+    .hud-label { color: #94a3b8; margin-right: 5px; }
+    .hud-value { color: #fbbf24; font-weight: bold; }
+    .quest-tag { color: #10b981; }
+
     .item-grid {
       display: grid;
       grid-template-columns: repeat(4, 1fr);
@@ -208,8 +180,7 @@
     }
 
     .item-slot {
-      width: 70px;
-      height: 70px;
+      width: 75px; height: 75px;
       background: rgba(0,0,0,0.3);
       border: 1px dashed #475569;
       border-radius: 8px;
@@ -220,11 +191,7 @@
       font-size: 0.7rem;
     }
 
-    .item-slot img {
-      width: 40px;
-      height: 40px;
-      object-fit: contain;
-    }
+    .item-slot img { width: 35px; height: 35px; margin-bottom: 4px; }
   </style>
 </head>
 <body>
@@ -239,42 +206,32 @@
     <button id="bag-toggle" onclick="toggleInventory()">🎒 背包 / 狀態</button>
 
     <div id="inventory-panel">
-      <div class="inv-header">背包</div>
-  
+      <div style="font-size:1.5rem; text-align:center; color:#fbbf24; margin-bottom:15px;">個人終端</div>
       <div class="inv-stats">
         <div><span class="hud-label">信用:</span> <span id="ui-credit" class="hud-value">0</span></div>
         <div><span class="hud-label">金錢:</span> <span class="hud-value">$<span id="ui-money">0</span></span></div>
-        <div style="grid-column: span 2;">
-          <span class="hud-label">當前任務:</span> <span id="ui-quest" class="quest-tag">無</span>
-        </div>
+        <div style="grid-column: span 2;"><span class="hud-label">當前任務:</span> <span id="ui-quest" class="quest-tag">無</span></div>
       </div>
-
-      <div class="hud-label" style="margin-bottom: 10px;">持有物品:</div>
-      <div class="item-grid" id="item-grid">
-        </div>
-
-      <button onclick="toggleInventory()" style="width:100%; margin-top:20px; padding:8px; background:#475569; border:none; color:white; cursor:pointer; border-radius:4px;">關閉</button>
+      <div class="item-grid" id="item-grid"></div>
+      <button onclick="toggleInventory()" style="width:100%; margin-top:20px; padding:10px; background:#475569; border:none; color:white; cursor:pointer; border-radius:4px;">返回遊戲</button>
     </div>
 
-    <div class="location-tag" id="location" style="position:absolute; top:20px; right:20px; color:white; background:rgba(0,0,0,0.5); padding:5px 15px; z-index:60;">地區名稱</div>
-    <div class="character-sprite">
-      <img id="char-img" src="" alt="角色">
-    </div>
-    <section class="dialogue-bar" onclick="handleDialogueClick()">
-      <div class="speaker-name" id="speaker">說話者</div>
-      <div class="dialogue-text" id="dialogue">內容...</div>
-      <div class="choices-container" id="choices"></div>
+    <div id="location" style="position:absolute; top:20px; right:20px; color:white; background:rgba(0,0,0,0.5); padding:5px 15px; border-radius:4px; z-index:60;">地區</div>
+    <div class="character-sprite"><img id="char-img" src="" alt=""></div>
+    <section class="dialogue-bar">
+      <div class="speaker-name" id="speaker"></div>
+      <div class="dialogue-text" id="dialogue"></div>
+      <div id="choices"></div>
     </section>
   </main>
 
   <script>
-    // --- 玩家狀態資料 ---
-    let playerState = {
-      credit: 3,      // 初始信用值
-      money: 100,     // 初始金錢
-      inventory: [],  // 道具區
-      quests: []      // 任務區
-    };
+    // --- 遊戲狀態 ---
+    let playerState = { credit: 3, money: 100, inventory: [], quests: [] };
+    let currentIntroIndex = 0;
+    let isTyping = false;
+    let timer = null;
+    let fullText = "";
 
     const introLines = [
       { text: "本遊戲可能會引起某些人的不適", img: "" },
@@ -288,18 +245,18 @@
       { text: "你能活著離開這裡嗎？", img: "" }
     ];
 
-    let fullText = ""; // 儲存當前節點的完整文字內容
-    let timer = null;  // 儲存計時器，方便清除
+    const itemDatabase = {
+      "鐵絲": "https://cdn-icons-png.flaticon.com/512/100/100514.png",
+      "後門鑰匙": "https://cdn-icons-png.flaticon.com/512/3082/3082043.png"
+    };
 
-    function typeWriter(element, text, speed = 50) {
-      // 初始化
+    // --- 打字機邏輯 ---
+    function typeWriter(element, text, speed = 60) {
       clearInterval(timer);
       fullText = text;
       element.textContent = "";
       isTyping = true;
-  
-      const hint = document.querySelector('.click-hint');
-      if(hint) hint.style.opacity = 0; // 開始打字時隱藏提示
+      document.querySelector('.click-hint').style.opacity = 0;
 
       let i = 0;
       timer = setInterval(() => {
@@ -312,54 +269,42 @@
       }, speed);
     }
 
-    // 結束打字的統一處理
     function finishTyping(element) {
       clearInterval(timer);
-      element.textContent = fullText; // 確保文字完整
+      element.textContent = fullText;
       isTyping = false;
-  
-      const hint = document.querySelector('.click-hint');
-      if(hint) hint.style.opacity = 1; // 顯示提示文字
+      document.querySelector('.click-hint').style.opacity = 1;
     }
 
-    // 新增：處理點擊對話框的跳過邏輯
-    function handleDialogueClick() {
-      const dialogueEl = document.getElementById('dialogue');
+    // --- 前情提要導航 ---
+    function nextIntro() {
       if (isTyping) {
-        // 如果正在打字，立即結束並顯示全部文字
-        finishTyping(dialogueEl);
-      } else {
-        // 如果已經打完字，這裡可以視需求決定是否觸發「下一步」
-        // 通常在有「選項按鈕」的情況下，點擊文字區塊不執行動作
-        console.log("文字已顯示完畢，等待玩家點選按鈕");
+        finishTyping(document.getElementById('intro-content'));
+        return;
       }
-    }
-      // 先讓內容淡出
+
+      const content = document.getElementById('intro-content');
+      const introImg = document.getElementById('intro-img');
+      const hint = document.querySelector('.click-hint');
+
       content.style.opacity = 0;
       introImg.style.opacity = 0;
       hint.style.opacity = 0;
 
       setTimeout(() => {
-        currentIntroIndex++; 
-
+        currentIntroIndex++;
         if (currentIntroIndex < introLines.length) {
-          const currentData = introLines[currentIntroIndex];
-
-          // 處理圖片
-          if (currentData.img !== "") {
-            introImg.src = currentData.img;
+          const data = introLines[currentIntroIndex];
+          if (data.img) {
+            introImg.src = data.img;
             introImg.style.display = "block";
-            setTimeout(() => { introImg.style.opacity = 1; }, 50);
+            setTimeout(() => introImg.style.opacity = 1, 50);
           } else {
             introImg.style.display = "none";
           }
-
-          // 處理文字（打字機效果）
           content.style.opacity = 1;
-          typeWriter(content, currentData.text, 100); // 100ms 是打字速度，可調整
-
+          typeWriter(content, data.text);
         } else {
-          // 講完了，進入遊戲
           document.getElementById('intro-overlay').style.display = 'none';
           document.getElementById('game-main').style.display = 'block';
           renderNode('start');
@@ -367,31 +312,14 @@
       }, 500);
     }
 
-    // 初始啟動
-    window.onload = () => {
-      const firstData = introLines[0];
-      const content = document.getElementById('intro-content');
-      const introImg = document.getElementById('intro-img');
-
-      if (firstData.img !== "") {
-        introImg.src = firstData.img;
-        introImg.style.display = "block";
-        introImg.style.opacity = 1;
-      }
-  
-      // 第一段文字也使用打字機
-      typeWriter(content, firstData.text, 100);
-    };
-
-    // --- 遊戲劇情資料節點 ---
-    // 新增邏輯：action (觸發動作), condition (顯示條件)
+    // --- 遊戲核心邏輯 ---
     const nodes = {
       start: {
         location: "勞改營入口",
         speaker: "張教官",
         text: "我是張教官，我是來告訴你們為什麼會來到這裡。",
         charImg: "chang.png",
-        action: () => { playerState.quests = ["活下去"]; }, // 接收初始任務
+        action: () => { playerState.quests = ["活下去"]; },
         choices: [{ text: "點擊繼續", next: "next1" }]
       },
       next1: {
@@ -404,7 +332,7 @@
       next2: {
         location: "勞改營入口",
         speaker: "張教官",
-        text: "我們現在來講新疆勞改營宣言，我念一遍，你念一遍。",
+        text: "現在來講新疆勞改營宣言，我念一遍，你念一遍。",
         charImg: "chang.png",
         choices: [
           { text: "跟著念", next: "speak" },
@@ -415,9 +343,9 @@
       speak: {
         location: "勞改營入口",
         speaker: "張教官",
-        text: "很好，相信你們都清楚這裡的規則了，是時候該進去了，後會有期。",
+        text: "很好，相信你們都清楚規則了，進去吧，後會有期。",
         charImg: "chang.png",
-        action: () => { playerState.credit += 1; }, // 信用值增加
+        action: () => { playerState.credit += 1; },
         choices: [
           { text: "進入勞改營", next: "story1" },
           { text: "不要動作", next: "nomove" }
@@ -426,16 +354,9 @@
       speaklittle: {
         location: "勞改營入口",
         speaker: "張教官",
-        text: "念大聲一點啦，我一個人都比你們念的大聲了。",
+        text: "念大聲一點啦，我一個人都比你們大聲！再給你們一次機會。",
         charImg: "chang.png",
-        action: () => { playerState.credit -= 1; }, // 信用值扣除
-        choices: [{ text: "點擊繼續", next: "next3" }]
-      },
-      next3: {
-        location: "勞改營入口",
-        speaker: "張教官",
-        text: "我再給你們一次機會",
-        charImg: "chang.png",
+        action: () => { playerState.credit -= 1; },
         choices: [
           { text: "跟著念", next: "speak" },
           { text: "不念 ", next: "nospeak" }
@@ -444,32 +365,31 @@
       nospeak: {
         location: "勞改營入口",
         speaker: "張教官",
-        text: "還嫌我不夠兇嗎，第一天進來就要造反嗎?",
+        text: "第一天進來就要造反嗎？我再給你最後一次機會！",
         charImg: "chang.png",
-        action: () => { playerState.credit -= 2; }, // 信用值扣除
-        choices: [{ text: "點擊繼續", next: "next3" }]
+        action: () => { playerState.credit -= 2; },
+        choices: [
+          { text: "跟著念", next: "speak" },
+          { text: "堅持不念 ", next: "nomove" }
+        ]
       },
       nomove: {
         location: "勞改營入口",
         speaker: "張教官",
-        text: "還站在那邊幹什麼？我說什麼就是什麼!",
+        text: "還站在那邊幹什麼？我說什麼就是什麼！帶走！",
         charImg: "chang.png",
-        action: () => { playerState.credit -= 1; }, // 信用值扣除
+        action: () => { playerState.credit -= 1; },
         choices: [{ text: "進入勞改營", next: "story1" }]
       },
       story1: {
         location: "勞改營內",
         speaker: "旁白",
-        text: "你暫時都會住在這裡了，為了長久之計，你該怎麼做?",
+        text: "你暫時住在這裡了。為了長久之計，你該怎麼做？",
         charImg: "",
         choices: [
           { text: "檢查床鋪", next: "check_bed" },
-          { 
-            text: "賄賂守衛 ($50)", 
-            next: "bribe_success", 
-            condition: () => playerState.money >= 50,
-          },
-          { text: "休息", next: "start" }
+          { text: "賄賂守衛 ($50)", next: "bribe_success", condition: () => playerState.money >= 50 },
+          { text: "休息", next: "story1" }
         ]
       },
       check_bed: {
@@ -477,66 +397,44 @@
         speaker: "旁白",
         text: "你在床板下發現了一根生鏽的鐵絲。",
         charImg: "",
-        action: () => { 
-            if(!playerState.inventory.includes("鐵絲")) playerState.inventory.push("鐵絲"); 
-        },
+        action: () => { if(!playerState.inventory.includes("鐵絲")) playerState.inventory.push("鐵絲"); },
         choices: [{ text: "收起來", next: "story1" }]
       },
       bribe_success: {
         location: "房門口",
         speaker: "守衛",
-        text: "算你識相，這把鑰匙你拿著，晚上安分點。",
-        charImg: "Gemini_Generated_Image_suylcdsuylcdsuyl.png",
+        text: "算你識相，這把鑰匙拿著，晚上安分點。",
+        charImg: "guard.png",
         action: () => {
-            playerState.money -= 50; // 扣錢
-            if(!playerState.inventory.includes("後門鑰匙")) {
-             playerState.inventory.push("後門鑰匙"); // 給鑰匙
-            }
+          playerState.money -= 50;
+          if(!playerState.inventory.includes("後門鑰匙")) playerState.inventory.push("後門鑰匙");
         },
         choices: [{ text: "收起來", next: "story1" }]
       },
       game_over_credit: {
         location: "勞改營陰暗的角落",
         speaker: "士兵",
-        text: "你的被主席認定為無法教化的人，你在統一上是一個很大的阻礙，都給你這麼多次機會了，看來你不想活了，那讓我助你一臂之力吧。",
-        charImg: "Gemini_Generated_Image_suylcdsuylcdsuyl.png",
+        text: "你被主席認定為無法教化的人。看來你不想活了，讓我助你一臂之力吧。",
+        charImg: "soldier.png",
         choices: [{ text: "重新開始", next: "reset_game" }]
       }
     };
 
-    // 定義道具圖鑑
-    const itemDatabase = {
-      "鐵絲": "https://cdn-icons-png.flaticon.com/512/100/100514.png", // 這裡可換成你的圖片檔名
-      "後門鑰匙": "https://cdn-icons-png.flaticon.com/512/3082/3082043.png"
-    };
-
-    function toggleInventory() {
-      const panel = document.getElementById('inventory-panel');
-      panel.style.display = (panel.style.display === 'block') ? 'none' : 'block';
-    }
-
     function updateUI() {
-      // 更新數值
       document.getElementById('ui-credit').textContent = playerState.credit;
       document.getElementById('ui-money').textContent = playerState.money;
       document.getElementById('ui-quest').textContent = playerState.quests[playerState.quests.length - 1] || "無";
 
-      // 更新道具欄 (含圖片)
       const grid = document.getElementById('item-grid');
-      grid.innerHTML = ""; // 清空
-
-      // 固定顯示 8 個格子
+      grid.innerHTML = "";
       for (let i = 0; i < 8; i++) {
         const slot = document.createElement('div');
         slot.className = "item-slot";
-    
         const itemName = playerState.inventory[i];
         if (itemName) {
           const img = document.createElement('img');
-          // 如果圖鑑有這張圖就顯示，沒有就顯示預設
-          img.src = itemDatabase[itemName] || "default_item.png"; 
+          img.src = itemDatabase[itemName] || "";
           slot.appendChild(img);
-      
           const nameTag = document.createElement('span');
           nameTag.textContent = itemName;
           slot.appendChild(nameTag);
@@ -546,7 +444,6 @@
     }
 
     function renderNode(nodeId) {
-      // 處理重新開始
       if(nodeId === 'reset_game') {
         playerState = { credit: 3, money: 100, inventory: [], quests: [] };
         nodeId = 'start';
@@ -555,13 +452,9 @@
       const node = nodes[nodeId];
       if (!node) return;
 
-      // 執行節點動作
       if (node.action) node.action();
-      
-      // 更新介面數值
       updateUI();
 
-      // 檢查信用值死亡結局
       if (playerState.credit <= 0 && nodeId !== 'game_over_credit') {
         renderNode('game_over_credit');
         return;
@@ -569,22 +462,22 @@
 
       document.getElementById('location').textContent = node.location;
       document.getElementById('speaker').textContent = node.speaker;
-      document.getElementById('dialogue').textContent = node.text;
+      
+      const dialogueEl = document.getElementById('dialogue');
+      typeWriter(dialogueEl, node.text, 30);
   
       const charImg = document.getElementById('char-img');
-      if (node.charImg && node.charImg !== "") {
+      if (node.charImg) {
         charImg.src = node.charImg;
         charImg.style.display = "block";
       } else {
-        charImg.style.display = "none"; // 如果該節點沒圖（如旁白時）就隱藏
+        charImg.style.display = "none";
       }
 
       const choicesEl = document.getElementById('choices');
       choicesEl.innerHTML = "";
       node.choices.forEach(choice => {
-        // 檢查條件 (例如金錢是否足夠)
         if (choice.condition && !choice.condition()) return;
-
         const btn = document.createElement('button');
         btn.className = "choice-btn";
         btn.textContent = choice.text;
@@ -592,6 +485,15 @@
         choicesEl.appendChild(btn);
       });
     }
+
+    function toggleInventory() {
+      const panel = document.getElementById('inventory-panel');
+      panel.style.display = (panel.style.display === 'block') ? 'none' : 'block';
+    }
+
+    window.onload = () => {
+      typeWriter(document.getElementById('intro-content'), introLines[0].text);
+    };
   </script>
 </body>
 </html>
