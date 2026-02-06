@@ -395,7 +395,7 @@
         choices: [{ text: "進入勞改營", next: "story1" }]
       },
       story1: {
-        location: "勞改營內",
+        location: "房間",
         speaker: "旁白",
         text: "你暫時住在這裡了。為了長久之計，你該怎麼做？",
         charImg: "",
@@ -403,7 +403,7 @@
         choices: [
           { text: "檢查床鋪", next: "check_bed" },
           { text: "賄賂守衛 ($50)", next: "bribe_success", condition: () => playerState.money >= 50 },
-          { text: "休息", next: "story1" }
+          { text: "休息", next: "day1" }
         ]
       },
       check_bed: {
@@ -413,7 +413,7 @@
         charImg: "",
         bg:"ChatGPT Image 2026年2月5日 上午11_55_39.png",
         action: () => { if(!playerState.inventory.includes("鐵絲")) playerState.inventory.push("鐵絲"); },
-        choices: [{ text: "收起來", next: "story1" }]
+        choices: [{ text: "收起來", next: "day1" }]
       },
       bribe_success: {
         location: "房門口",
@@ -425,7 +425,34 @@
           playerState.money -= 50;
           if(!playerState.inventory.includes("後門鑰匙")) playerState.inventory.push("後門鑰匙");
         },
-        choices: [{ text: "收起來", next: "story1" }]
+        choices: [{ text: "收起來", next: "day1" }]
+      },
+      day1: {
+        location: "棉花田",
+        speaker: "馮教官",
+        text: "各位，今天是你們第一天工作，我們來看看這個告示板，這會讓你知道你要幹嘛。",
+        charImg: "",
+        bg:"ChatGPT Image 2026年2月5日 上午11_55_39.png",
+        choices: [{ text: "點擊繼續", next: "next3" }]
+      },
+      next3: {
+        location: "棉花田",
+        speaker: "馮教官",
+        text: "他說。",
+        charImg: "",
+        bg:"ChatGPT Image 2026年2月5日 上午11_55_39.png",
+        choices: [{ text: "點擊繼續", next: "next4" }]
+      },
+      next4: {
+        location: "棉花田",
+        speaker: "馮教官",
+        text: "你們要認真採棉花，這樣就可以賺錢，快去吧。",
+        charImg: "",
+        bg:"ChatGPT Image 2026年2月5日 上午11_55_39.png",
+        choices: [
+          { text: "採很多", next: "many" },
+          { text: "偷懶一下，只採一點", next: "little" },
+          { text: "不動", next: "nomove2" }]
       },
       game_over_credit: {
         location: "勞改營陰暗的角落",
