@@ -323,6 +323,7 @@
         speaker: "張教官",
         text: "我是張教官，我是來告訴你們為什麼會來到這裡。",
         charImg: "chang.png",
+        bg:"ChatGPT Image 2026年2月5日 上午11_55_39.png"
         action: () => { playerState.quests = ["活下去"]; },
         choices: [{ text: "點擊繼續", next: "next1" }]
       },
@@ -331,6 +332,7 @@
         speaker: "張教官",
         text: "因為你們違背我們偉大的楊主席的命令，所以你們要進來好好反省你們的罪過。",
         charImg: "chang.png",
+        bg:"ChatGPT Image 2026年2月5日 上午11_55_39.png"
         choices: [{ text: "點擊繼續", next: "next2" }]
       },
       next2: {
@@ -338,6 +340,7 @@
         speaker: "張教官",
         text: "現在來講新疆勞改營宣言，我念一遍，你念一遍。",
         charImg: "chang.png",
+        bg:"ChatGPT Image 2026年2月5日 上午11_55_39.png"
         choices: [
           { text: "跟著念", next: "speak" },
           { text: "含糊帶過", next: "speaklittle" },
@@ -349,6 +352,7 @@
         speaker: "張教官",
         text: "很好，相信你們都清楚規則了，進去吧，後會有期。",
         charImg: "chang.png",
+        bg:"ChatGPT Image 2026年2月5日 上午11_55_39.png"
         action: () => { playerState.credit += 1; },
         choices: [
           { text: "進入勞改營", next: "story1" },
@@ -360,6 +364,7 @@
         speaker: "張教官",
         text: "念大聲一點啦，我一個人都比你們大聲！再給你們一次機會。",
         charImg: "chang.png",
+        bg:"ChatGPT Image 2026年2月5日 上午11_55_39.png"
         action: () => { playerState.credit -= 1; },
         choices: [
           { text: "跟著念", next: "speak" },
@@ -371,6 +376,7 @@
         speaker: "張教官",
         text: "第一天進來就要造反嗎？我再給你最後一次機會！",
         charImg: "chang.png",
+        bg:"ChatGPT Image 2026年2月5日 上午11_55_39.png"
         action: () => { playerState.credit -= 2; },
         choices: [
           { text: "跟著念", next: "speak" },
@@ -382,6 +388,7 @@
         speaker: "張教官",
         text: "還站在那邊幹什麼？我說什麼就是什麼！帶走！",
         charImg: "chang.png",
+        bg:"ChatGPT Image 2026年2月5日 上午11_55_39.png"
         action: () => { playerState.credit -= 1; },
         choices: [{ text: "進入勞改營", next: "story1" }]
       },
@@ -390,6 +397,7 @@
         speaker: "旁白",
         text: "你暫時住在這裡了。為了長久之計，你該怎麼做？",
         charImg: "",
+        bg:"ChatGPT Image 2026年2月5日 上午11_55_39.png"
         choices: [
           { text: "檢查床鋪", next: "check_bed" },
           { text: "賄賂守衛 ($50)", next: "bribe_success", condition: () => playerState.money >= 50 },
@@ -401,6 +409,7 @@
         speaker: "旁白",
         text: "你在床板下發現了一根生鏽的鐵絲。",
         charImg: "",
+        bg:"ChatGPT Image 2026年2月5日 上午11_55_39.png"
         action: () => { if(!playerState.inventory.includes("鐵絲")) playerState.inventory.push("鐵絲"); },
         choices: [{ text: "收起來", next: "story1" }]
       },
@@ -409,6 +418,7 @@
         speaker: "守衛",
         text: "算你識相，這把鑰匙拿著，晚上安分點。",
         charImg: "guard.png",
+        bg:"ChatGPT Image 2026年2月5日 上午11_55_39.png"
         action: () => {
           playerState.money -= 50;
           if(!playerState.inventory.includes("後門鑰匙")) playerState.inventory.push("後門鑰匙");
@@ -420,6 +430,7 @@
         speaker: "士兵",
         text: "你被主席認定為無法教化的人。看來你不想活了，讓我助你一臂之力吧。",
         charImg: "soldier.png",
+        bg:"ChatGPT Image 2026年2月5日 上午11_55_39.png"
         choices: [{ text: "重新開始", next: "reset_game" }]
       }
     };
