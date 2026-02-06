@@ -231,7 +231,7 @@
 
   <script>
     // --- 遊戲狀態 ---
-    let playerState = { credit: 3, money: 100, inventory: [], quests: [] };
+    let playerState = { credit: 3, money: 100, inventory: [], quests: [], currentNode: 'start'};
     let currentIntroIndex = 0;
     let isTyping = false;
     let timer = null;
@@ -449,7 +449,7 @@
 
     function renderNode(nodeId) {
       if(nodeId === 'reset_game') {
-        playerState = { credit: 3, money: 100, inventory: [], quests: [] };
+        playerState = { credit: 3, money: 100, inventory: [], quests: [], currentNode: 'start' };
         nodeId = 'start';
       }
 
@@ -498,6 +498,43 @@
     window.onload = () => {
       typeWriter(document.getElementById('intro-content'), introLines[0].text);
     };
+
+    // --- 存讀檔功能 ---
+
+    function saveGame() {
+      try {
+        // 將當前狀態轉為 JSON 字串存入 localStorage
+        const saveData = JSON.stringify(playerState);
+        localStorage.setItem('escape_labor_camp_save', saveData);
+        alert("進度已儲存！");
+      } catch (e) {
+        console.error("存檔失敗", e);
+        alert("存檔失敗，請確認瀏覽器權限。");
+      }
+    }
+    
+    function loadGame() {
+      const saveData = localStorage.getItem('escape_labor_camp_save');
+  
+      if (!saveData) {
+        alert("找不到任何存檔！");
+        return;
+      }
+
+      try {
+        // 解析資料並覆蓋當前狀態
+        const loadedState = JSON.parse(saveData);
+        playerState = loadedState;
+    
+        // 關閉背包面板並依照存檔節點重新渲染畫面
+        toggleInventory();
+        renderNode(playerState.currentNode);
+        alert("進度已載入！");
+      } catch (e) {
+        console.error("讀檔失敗", e);
+        alert("存檔檔案損毀。");
+      }
+    }
   </script>
 </body>
 </html>
