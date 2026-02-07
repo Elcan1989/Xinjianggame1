@@ -64,7 +64,6 @@
       position: relative;
       width: 100vw; height: 100vh;
       display: none;
-      background-image: var(--bg-image);
       background-size: cover;
       background-position: center;
     }
@@ -192,6 +191,34 @@
     }
 
     .item-slot img { width: 35px; height: 35px; margin-bottom: 4px; }
+    
+    /* 日期與地點顯示層 */
+    .ui-top-right {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 8px;
+      z-index: 60;
+    }
+
+    #game-day {
+      color: #fbbf24;
+      background: rgba(0,0,0,0.7);
+      padding: 5px 15px;
+      border-radius: 4px;
+      font-weight: bold;
+      border: 1px solid #fbbf24;
+    }
+
+    #location {
+      color: white;
+      background: rgba(0,0,0,0.5);
+      padding: 5px 15px;
+      border-radius: 4px;
+    }
   </style>
 </head>
 <body>
@@ -212,6 +239,9 @@
         <div><span class="hud-label">金錢:</span> <span class="hud-value">$<span id="ui-money">0</span></span></div>
         <div style="grid-column: span 2;"><span class="hud-label">當前任務:</span> <span id="ui-quest" class="quest-tag">無</span></div>
       </div>
+      <div style="text-align:center; padding:8px; background:rgba(255,255,255,0.05); border-radius:8px; margin-bottom:15px;">
+        <span class="hud-label">存活天數:</span> <span class="hud-value">第 <span id="ui-day-alt">1</span> 天</span>
+      </div>
       <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 15px;">
         <button onclick="saveGame()" style="padding:10px; background:#10b981; border:none; color:white; cursor:pointer; border-radius:4px;">💾 儲存進度</button>
         <button onclick="loadGame()" style="padding:10px; background:#6366f1; border:none; color:white; cursor:pointer; border-radius:4px;">📂 讀取進度</button>
@@ -220,7 +250,11 @@
       <button onclick="toggleInventory()" style="width:100%; margin-top:20px; padding:10px; background:#475569; border:none; color:white; cursor:pointer; border-radius:4px;">返回遊戲</button>
     </div>
 
-    <div id="location" style="position:absolute; top:20px; right:20px; color:white; background:rgba(0,0,0,0.5); padding:5px 15px; border-radius:4px; z-index:60;">地區</div>
+    <div class="ui-top-right">
+      <div id="game-day">第 1 天</div>
+      <div id="location">地區</div>
+    </div>
+    
     <div class="character-sprite"><img id="char-img" src="" alt=""></div>
     <section class="dialogue-bar">
       <div class="speaker-name" id="speaker"></div>
@@ -231,7 +265,7 @@
 
   <script>
     // --- 遊戲狀態 ---
-    let playerState = { credit: 3, money: 100, inventory: [], quests: [], currentNode: 'start'};
+    let playerState = { day: 1, credit: 3, money: 100, inventory: [], quests: [], currentNode: 'start'};
     let currentIntroIndex = 0;
     let isTyping = false;
     let timer = null;
@@ -325,7 +359,7 @@
         text: "我是張教官，我是來告訴你們為什麼會來到這裡。",
         charImg: "chang.png",
         bg:"ChatGPT Image 2026年2月5日 上午11_55_39.png",
-        action: () => { playerState.quests = ["活下去"]; },
+        action: () => { playerState.quests = ["活下去"]; playerState.day = 1; },
         choices: [{ text: "點擊繼續", next: "next1" }]
       },
       next1: {
@@ -464,7 +498,7 @@
       many: {
         location: "棉花田",
         speaker: "馮教官",
-        text: "正確答案，採這麼多棉花就可以讓國家賺很多錢。這是給你的獎勵。",
+        text: "正確答案，採這麼多棉花就可以讓國家賺很多錢.這是給你的獎勵。",
         charImg: "Feng.png",
         bg:"cotton fields.png",
         action: () => { playerState.credit += 1; playerState.money += 100; },
@@ -491,14 +525,6 @@
       story2: {
         location: "房間",
         speaker: "旁白",
-        text: "又到了睡覺時間",
-        charImg: "",
-        bg:"ChatGPT Image 2026年2月5日 上午11_55_39.png",
-        choices: [{ text: "點擊繼續", next: "story2" }]
-      },
-      story2: {
-        location: "房間",
-        speaker: "旁白",
         text: "你想怎麼做？",
         charImg: "",
         bg:"ChatGPT Image 2026年2月5日 上午11_55_39.png",
@@ -507,6 +533,12 @@
           { text: "休息", next: "sleep2" }
         ]
       },
+      makefriend: {
+        location: "房間",
+        speaker: "鄰居",
+        text: "嘿，小聲點... 我聽說後門那邊守備比較鬆...",
+        choices: [{ text: "點擊繼續", next: "sleep2" }]
+      },
       sleep2: {
         location: "房間",
         speaker: "旁白",
@@ -514,6 +546,13 @@
         charImg: "",
         bg:"ChatGPT Image 2026年2月5日 上午11_55_39.png",
         choices: [{ text: "點擊繼續", next: "day2" }]
+      },
+      day2: {
+        location: "勞改營廣播",
+        speaker: "廣播",
+        text: "全體集合！今天是新的一天，繼續為楊主席效力！",
+        action: () => { playerState.day = 2; }, 
+        choices: [{ text: "點擊繼續", next: "story1" }]
       },
       game_over_credit: {
         location: "勞改營陰暗的角落",
@@ -529,6 +568,10 @@
       document.getElementById('ui-credit').textContent = playerState.credit;
       document.getElementById('ui-money').textContent = playerState.money;
       document.getElementById('ui-quest').textContent = playerState.quests[playerState.quests.length - 1] || "無";
+      
+      // 更新日期
+      document.getElementById('game-day').textContent = `第 ${playerState.day} 天`;
+      document.getElementById('ui-day-alt').textContent = playerState.day;
 
       const grid = document.getElementById('item-grid');
       grid.innerHTML = "";
@@ -550,7 +593,7 @@
 
     function renderNode(nodeId) {
       if(nodeId === 'reset_game') {
-        playerState = { credit: 3, money: 100, inventory: [], quests: [], currentNode: 'start' };
+        playerState = { day: 1, credit: 3, money: 100, inventory: [], quests: [], currentNode: 'start' };
         nodeId = 'start';
       }
 
@@ -634,5 +677,4 @@
   </script>
 </body>
 </html>
-</body>
 </html>
