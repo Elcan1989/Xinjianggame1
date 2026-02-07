@@ -474,6 +474,7 @@
         text: "各位，今天是你們第一天工作，我們來看看這個告示板，這會讓你知道你要幹嘛。",
         charImg: "Feng.png",
         bg:"cotton fields.png",
+        action: () => { playerState.day = 2; }, 
         choices: [{ text: "點擊繼續", next: "next3" }]
       },
       next3: {
@@ -525,7 +526,7 @@
       story2: {
         location: "房間",
         speaker: "旁白",
-        text: "你想怎麼做？",
+        text: "回到房間，你想怎麼做？",
         charImg: "",
         bg:"ChatGPT Image 2026年2月5日 上午11_55_39.png",
         choices: [
@@ -537,7 +538,7 @@
         location: "房間",
         speaker: "鄰居",
         text: "嘿，小聲點... 我聽說後門那邊守備比較鬆...",
-        choices: [{ text: "點擊繼續", next: "sleep2" }]
+        choices: [{ text: "點擊繼續", next: "story2" }]
       },
       sleep2: {
         location: "房間",
@@ -550,9 +551,23 @@
       day2: {
         location: "勞改營廣播",
         speaker: "廣播",
-        text: "全體集合！今天是新的一天，繼續為楊主席效力！",
-        action: () => { playerState.day = 2; }, 
-        choices: [{ text: "點擊繼續", next: "story1" }]
+        text: "全體集合！今天是新的一天，今天要來體能訓練！",
+        action: () => { playerState.day = 3; }, 
+        choices: [{ text: "點擊繼續", next: "next5" }]
+      },
+      next5: {
+        location: "勞改營內部",
+        speaker: "陳教官",
+        text: "我們今天要跑1600，跑太慢會有懲罰！",
+        action: () => { playerState.day = 3; }, 
+        choices: [{ text: "點擊繼續", next: "next6" }]
+      },
+      next5: {
+        location: "勞改營內部",
+        speaker: "陳教官",
+        text: "預備，開始",
+        action: () => { playerState.day = 3; }, 
+        choices: [{ text: "點擊繼續", next: "next7" }]
       },
       game_over_credit: {
         location: "勞改營陰暗的角落",
