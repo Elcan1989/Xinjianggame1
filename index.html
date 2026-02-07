@@ -396,13 +396,13 @@
       story1: {
         location: "房間",
         speaker: "旁白",
-        text: "你暫時住在這裡了。為了長久之計，你該怎麼做？",
+        text: "你暫時住在這裡了。為了長久之計，你想怎麼做？",
         charImg: "",
         bg:"ChatGPT Image 2026年2月5日 上午11_55_39.png",
         choices: [
           { text: "檢查床鋪", next: "check_bed" },
           { text: "賄賂守衛 ($50)", next: "bribe_success", condition: () => playerState.money >= 50 },
-          { text: "休息", next: "day1" }
+          { text: "休息", next: "sleep1" }
         ]
       },
       check_bed: {
@@ -425,6 +425,14 @@
           if(!playerState.inventory.includes("後門鑰匙")) playerState.inventory.push("後門鑰匙");
         },
         choices: [{ text: "收起來", next: "story1" }]
+      },
+      sleep1: {
+        location: "房間",
+        speaker: "旁白",
+        text: "不知道為什麼，你很快的就進入了夢鄉。",
+        charImg: "",
+        bg:"ChatGPT Image 2026年2月5日 上午11_55_39.png",
+        choices: [{ text: "點擊繼續", next: "day1" }]
       },
       day1: {
         location: "棉花田",
@@ -486,7 +494,26 @@
         text: "又到了睡覺時間",
         charImg: "",
         bg:"ChatGPT Image 2026年2月5日 上午11_55_39.png",
-        choices: [{ text: "繼續遊戲", next: "start" }]
+        choices: [{ text: "點擊繼續", next: "story2" }]
+      },
+      story2: {
+        location: "房間",
+        speaker: "旁白",
+        text: "你想怎麼做？",
+        charImg: "",
+        bg:"ChatGPT Image 2026年2月5日 上午11_55_39.png",
+        choices: [
+          { text: "跟鄰居打好關係", next: "makefriend" },
+          { text: "休息", next: "sleep2" }
+        ]
+      },
+      sleep2: {
+        location: "房間",
+        speaker: "旁白",
+        text: "不知道為什麼，你很快的就進入了夢鄉。",
+        charImg: "",
+        bg:"ChatGPT Image 2026年2月5日 上午11_55_39.png",
+        choices: [{ text: "點擊繼續", next: "day2" }]
       },
       game_over_credit: {
         location: "勞改營陰暗的角落",
