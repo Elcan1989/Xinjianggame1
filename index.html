@@ -235,7 +235,7 @@
     <div id="inventory-panel">
       <div style="font-size:1.5rem; text-align:center; color:#fbbf24; margin-bottom:15px;">個人終端</div>
       <div class="inv-stats">
-        <div><span class="hud-label">信用:</span> <span id="ui-credit" class="hud-value">0</span></div>
+        <div><span class="hud-label">社會信用點數:</span> <span id="ui-credit" class="hud-value">0</span></div>
         <div><span class="hud-label">金錢:</span> <span class="hud-value">$<span id="ui-money">0</span></span></div>
         <div style="grid-column: span 2;"><span class="hud-label">當前任務:</span> <span id="ui-quest" class="quest-tag">無</span></div>
       </div>
@@ -397,7 +397,7 @@
       speaklittle: {
         location: "勞改營入口",
         speaker: "張教官",
-        text: "念大聲一點啦，我一個人都比你們大聲！再給你們一次機會。",
+        text: "念大聲一點啦，別在歪樓了。我一個人都比你們大聲！再給你們一次機會。",
         charImg: "chang.png",
         bg:"ChatGPT Image 2026年2月5日 上午11_55_39.png",
         action: () => { playerState.credit -= 1; },
@@ -409,7 +409,7 @@
       nospeak: {
         location: "勞改營入口",
         speaker: "張教官",
-        text: "第一天進來就要造反嗎？我再給你最後一次機會！",
+        text: "第一天進來就要造反嗎？我再給你最後一次機會！你忘記教官會發火了嗎？",
         charImg: "chang.png",
         bg:"ChatGPT Image 2026年2月5日 上午11_55_39.png",
         action: () => { playerState.credit -= 2; },
@@ -480,7 +480,7 @@
       next3: {
         location: "棉花田",
         speaker: "馮教官",
-        text: "他說。",
+        text: "ㄜ，他說。",
         charImg: "Feng.png",
         bg:"cotton fields.png",
         choices: [{ text: "點擊繼續", next: "next4" }]
@@ -508,7 +508,7 @@
       little: {
         location: "棉花田",
         speaker: "馮教官",
-        text: "你們會不會有點太偷懶了。沒關係，你還是有獎勵。",
+        text: "我的小老師，你們會不會有點太偷懶了。沒關係，就當我老花沒看到。所以你還是有獎勵。",
         charImg: "Feng.png",
         bg:"cotton fields.png",
         action: () => { playerState.money += 50; },
@@ -558,16 +558,23 @@
       next5: {
         location: "勞改營內部",
         speaker: "陳教官",
-        text: "我們今天要跑1600，跑太慢會有懲罰！",
-        action: () => { playerState.day = 3; }, 
-        choices: [{ text: "點擊繼續", next: "next6" }]
+        text: "我們今天要跑1600，跑太慢會有懲罰歐！有人要跑嗎？",
+        choices: [
+          { text: "好，沒問題", next: "next6" },
+          { text: "不要", next: "toomanyquestions" }]
       },
-      next5: {
+      next6: {
         location: "勞改營內部",
         speaker: "陳教官",
-        text: "預備，開始",
-        action: () => { playerState.day = 3; }, 
+        text: "預備，開始！",
         choices: [{ text: "點擊繼續", next: "next7" }]
+      },
+      toomanyquestions: {
+        location: "勞改營內部",
+        speaker: "陳教官",
+        text: "拿來那麼多問題？",
+        action: () => { playerState.credit -= 1; },
+        choices: [{ text: "點擊繼續", next: "next5" }]
       },
       game_over_credit: {
         location: "勞改營陰暗的角落",
