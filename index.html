@@ -552,6 +552,7 @@
         location: "勞改營廣播",
         speaker: "廣播",
         text: "全體集合！今天是新的一天，今天要來體能訓練！",
+        charImg: ""
         action: () => { playerState.day = 3; }, 
         choices: [{ text: "點擊繼續", next: "next5" }]
       },
@@ -559,6 +560,7 @@
         location: "勞改營內部",
         speaker: "陳教官",
         text: "我們今天要跑1600，跑太慢會有懲罰歐！有人要跑嗎？",
+        charImg: ""
         choices: [
           { text: "好，沒問題", next: "next6" },
           { text: "不要", next: "toomanyquestions" }]
@@ -567,7 +569,22 @@
         location: "勞改營內部",
         speaker: "陳教官",
         text: "預備，開始！",
+        charImg: ""
         choices: [{ text: "點擊繼續", next: "next7" }]
+      },
+      next7: {
+        location: "勞改營內部",
+        speaker: "謝同志",
+        text: "呼呼呼，我好喘喔",
+        charImg: ""
+        choices: [{ text: "點擊繼續", next: "next8" }]
+      },
+      next8: {
+        location: "勞改營內部",
+        speaker: "旁白",
+        text: "蹦的一聲，謝同志因跑太慢被消失了",
+        charImg: ""
+        choices: [{ text: "點擊繼續", next: "next9" }]
       },
       toomanyquestions: {
         location: "勞改營內部",
