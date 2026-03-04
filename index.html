@@ -192,7 +192,6 @@
 
     .item-slot img { width: 35px; height: 35px; margin-bottom: 4px; }
     
-    /* 日期與地點顯示層 */
     .ui-top-right {
       position: absolute;
       top: 20px;
@@ -552,7 +551,7 @@
         location: "勞改營廣播",
         speaker: "廣播",
         text: "全體集合！今天是新的一天，今天要來體能訓練！",
-        charImg: ""
+        charImg: "",
         action: () => { playerState.day = 3; }, 
         choices: [{ text: "點擊繼續", next: "next5" }]
       },
@@ -560,7 +559,7 @@
         location: "勞改營內部",
         speaker: "陳教官",
         text: "我們今天要跑1600，跑太慢會有懲罰歐！有人要跑嗎？",
-        charImg: ""
+        charImg: "",
         choices: [
           { text: "好，沒問題", next: "next6" },
           { text: "不要", next: "toomanyquestions" }]
@@ -569,22 +568,29 @@
         location: "勞改營內部",
         speaker: "陳教官",
         text: "預備，開始！",
-        charImg: ""
+        charImg: "",
         choices: [{ text: "點擊繼續", next: "next7" }]
       },
       next7: {
         location: "勞改營內部",
         speaker: "謝同志",
         text: "呼呼呼，我好喘喔",
-        charImg: ""
+        charImg: "",
         choices: [{ text: "點擊繼續", next: "next8" }]
       },
       next8: {
         location: "勞改營內部",
         speaker: "旁白",
         text: "蹦的一聲，謝同志因跑太慢被消失了",
-        charImg: ""
+        charImg: "",
         choices: [{ text: "點擊繼續", next: "next9" }]
+      },
+      next9: {
+        location: "勞改營內部",
+        speaker: "旁白",
+        text: "訓練結束了，你活了下來...",
+        charImg: "",
+        choices: [{ text: "回房間", next: "story1" }]
       },
       toomanyquestions: {
         location: "勞改營內部",
@@ -608,7 +614,6 @@
       document.getElementById('ui-money').textContent = playerState.money;
       document.getElementById('ui-quest').textContent = playerState.quests[playerState.quests.length - 1] || "無";
       
-      // 更新日期
       document.getElementById('game-day').textContent = `第 ${playerState.day} 天`;
       document.getElementById('ui-day-alt').textContent = playerState.day;
 
@@ -648,7 +653,6 @@
         return;
       }
 
-      // 切換背景圖
       if (node.bg) {
         document.getElementById('game-main').style.backgroundImage = `url('${node.bg}')`;
       }
@@ -715,5 +719,4 @@
     }
   </script>
 </body>
-</html>
 </html>
