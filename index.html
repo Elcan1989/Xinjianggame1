@@ -21,7 +21,6 @@
       font-family: "Microsoft JhengHei", sans-serif;
     }
 
-    /* --- 前情動畫層 --- */
     #intro-overlay {
       position: fixed;
       top: 0; left: 0;
@@ -43,6 +42,7 @@
       max-width: 80%;
       line-height: 1.8;
       transition: opacity 0.5s ease;
+      min-height: 3em;
     }
 
     .click-hint {
@@ -109,6 +109,7 @@
       line-height: 1.8; 
       margin-bottom: 25px; 
       color: #e2e8f0;
+      min-height: 1.5em;
     }
 
     .choice-btn {
@@ -192,7 +193,6 @@
 
     .item-slot img { width: 35px; height: 35px; margin-bottom: 4px; }
     
-    /* 日期與地點顯示層 */
     .ui-top-right {
       position: absolute;
       top: 20px;
@@ -235,16 +235,16 @@
     <div id="inventory-panel">
       <div style="font-size:1.5rem; text-align:center; color:#fbbf24; margin-bottom:15px;">個人終端</div>
       <div class="inv-stats">
-        <div><span class="hud-label">社會信用點數:</span> <span id="ui-credit" class="hud-value">0</span></div>
+        <div><span class="hud-label">信用:</span> <span id="ui-credit" class="hud-value">0</span></div>
         <div><span class="hud-label">金錢:</span> <span class="hud-value">$<span id="ui-money">0</span></span></div>
-        <div style="grid-column: span 2;"><span class="hud-label">當前任務:</span> <span id="ui-quest" class="quest-tag">無</span></div>
+        <div style="grid-column: span 2;"><span class="hud-label">任務:</span> <span id="ui-quest" class="quest-tag">無</span></div>
       </div>
       <div style="text-align:center; padding:8px; background:rgba(255,255,255,0.05); border-radius:8px; margin-bottom:15px;">
         <span class="hud-label">存活天數:</span> <span class="hud-value">第 <span id="ui-day-alt">1</span> 天</span>
       </div>
       <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 15px;">
-        <button onclick="saveGame()" style="padding:10px; background:#10b981; border:none; color:white; cursor:pointer; border-radius:4px;">💾 儲存進度</button>
-        <button onclick="loadGame()" style="padding:10px; background:#6366f1; border:none; color:white; cursor:pointer; border-radius:4px;">📂 讀取進度</button>
+        <button onclick="saveGame()" style="padding:10px; background:#10b981; border:none; color:white; cursor:pointer; border-radius:4px;">💾 儲存</button>
+        <button onclick="loadGame()" style="padding:10px; background:#6366f1; border:none; color:white; cursor:pointer; border-radius:4px;">📂 讀取</button>
       </div>
       <div class="item-grid" id="item-grid"></div>
       <button onclick="toggleInventory()" style="width:100%; margin-top:20px; padding:10px; background:#475569; border:none; color:white; cursor:pointer; border-radius:4px;">返回遊戲</button>
@@ -264,7 +264,6 @@
   </main>
 
   <script>
-    // --- 遊戲狀態 ---
     let playerState = { day: 1, credit: 3, money: 100, inventory: [], quests: [], currentNode: 'start'};
     let currentIntroIndex = 0;
     let isTyping = false;
@@ -277,7 +276,7 @@
       { text: "本遊戲內容皆為製作團隊原創", img: "" },
       { text: "若有雷同，真的不是我們的問題", img: "" },
       { text: "機智楊老生活：逃離勞改營", img: "photo.png" },
-      { text: "機智楊老生活逃離勞改營製作小組出品", img: "" },
+      { text: "機智楊老生活製作小組出品", img: "" },
       { text: "這是一段不為人知的故事...", img: "" },
       { text: "在這裡，自由是奢侈的空氣。", img: "" },
       { text: "你能活著離開這裡嗎？", img: "" }
@@ -288,13 +287,13 @@
       "後門鑰匙": "https://cdn-icons-png.flaticon.com/512/3082/3082043.png"
     };
 
-    // --- 打字機邏輯 ---
     function typeWriter(element, text, speed = 60) {
       clearInterval(timer);
       fullText = text;
       element.textContent = "";
       isTyping = true;
-      document.querySelector('.click-hint').style.opacity = 0;
+      const hint = document.querySelector('.click-hint');
+      if(hint) hint.style.opacity = 0;
 
       let i = 0;
       timer = setInterval(() => {
@@ -311,14 +310,13 @@
       clearInterval(timer);
       element.textContent = fullText;
       isTyping = false;
-      document.querySelector('.click-hint').style.opacity = 1;
+      const hint = document.querySelector('.click-hint');
+      if(hint) hint.style.opacity = 1;
     }
 
-    // --- 前情提要導航 ---
     function nextIntro() {
       const content = document.getElementById('intro-content');
       const introImg = document.getElementById('intro-img');
-      const hint = document.querySelector('.click-hint');
 
       if (isTyping) {
         finishTyping(content);
@@ -330,7 +328,6 @@
       if (currentIntroIndex < introLines.length) {
         content.style.opacity = 0;
         introImg.style.opacity = 0;
-        hint.style.opacity = 0;
 
         setTimeout(() => {
           const data = introLines[currentIntroIndex];
@@ -343,7 +340,7 @@
           }
           content.style.opacity = 1;
           typeWriter(content, data.text);
-        }, 500);
+        }, 300);
       } else {
         document.getElementById('intro-overlay').style.display = 'none';
         document.getElementById('game-main').style.display = 'block';
@@ -351,7 +348,6 @@
       }
     }
 
-    // --- 遊戲核心邏輯 ---
     const nodes = {
       start: {
         location: "勞改營入口",
@@ -367,7 +363,6 @@
         speaker: "張教官",
         text: "因為你們違背我們偉大的楊主席的命令。",
         charImg: "chang.png",
-        bg:"ChatGPT Image 2026年2月5日 上午11_55_39.png",
         choices: [{ text: "點擊繼續", next: "next2" }]
       },
       next2: {
@@ -375,7 +370,6 @@
         speaker: "張教官",
         text: "現在來講新疆勞改營宣言，我念一遍，你念一遍。",
         charImg: "chang.png",
-        bg:"ChatGPT Image 2026年2月5日 上午11_55_39.png",
         choices: [
           { text: "跟著念", next: "speak" },
           { text: "含糊帶過", next: "speaklittle" },
@@ -387,7 +381,6 @@
         speaker: "張教官",
         text: "很好，相信你們都清楚規則了，進去吧，後會有期。",
         charImg: "chang.png",
-        bg:"ChatGPT Image 2026年2月5日 上午11_55_39.png",
         action: () => { playerState.credit += 1; },
         choices: [
           { text: "進入勞改營", next: "story1" },
@@ -397,9 +390,8 @@
       speaklittle: {
         location: "勞改營入口",
         speaker: "張教官",
-        text: "念大聲一點啦，別在歪樓了。我一個人都比你們大聲！再給你們一次機會。",
+        text: "念大聲一點啦，再給你們一次機會。",
         charImg: "chang.png",
-        bg:"ChatGPT Image 2026年2月5日 上午11_55_39.png",
         action: () => { playerState.credit -= 1; },
         choices: [
           { text: "跟著念", next: "speak" },
@@ -409,9 +401,8 @@
       nospeak: {
         location: "勞改營入口",
         speaker: "張教官",
-        text: "第一天進來就要造反嗎？我再給你最後一次機會！你忘記教官會發火了嗎？",
+        text: "第一天進來就要造反嗎？我再給你最後一次機會！",
         charImg: "chang.png",
-        bg:"ChatGPT Image 2026年2月5日 上午11_55_39.png",
         action: () => { playerState.credit -= 2; },
         choices: [
           { text: "跟著念", next: "speak" },
@@ -423,7 +414,6 @@
         speaker: "張教官",
         text: "還站在那邊幹什麼？我說什麼就是什麼！",
         charImg: "chang.png",
-        bg:"ChatGPT Image 2026年2月5日 上午11_55_39.png",
         action: () => { playerState.credit -= 1; },
         choices: [{ text: "進入勞改營", next: "story1" }]
       },
@@ -432,7 +422,6 @@
         speaker: "旁白",
         text: "你暫時住在這裡了。為了長久之計，你想怎麼做？",
         charImg: "",
-        bg:"ChatGPT Image 2026年2月5日 上午11_55_39.png",
         choices: [
           { text: "檢查床鋪", next: "check_bed" },
           { text: "賄賂守衛 ($50)", next: "bribe_success", condition: () => playerState.money >= 50 },
@@ -443,8 +432,6 @@
         location: "房間",
         speaker: "旁白",
         text: "你在床板下發現了一根生鏽的鐵絲。",
-        charImg: "",
-        bg:"ChatGPT Image 2026年2月5日 上午11_55_39.png",
         action: () => { if(!playerState.inventory.includes("鐵絲")) playerState.inventory.push("鐵絲"); },
         choices: [{ text: "收起來", next: "story1" }]
       },
@@ -453,7 +440,6 @@
         speaker: "守衛",
         text: "算你識相，這把鑰匙拿著，晚上安分點。",
         charImg: "guard.png",
-        bg:"ChatGPT Image 2026年2月5日 上午11_55_39.png",
         action: () => {
           playerState.money -= 50;
           if(!playerState.inventory.includes("後門鑰匙")) playerState.inventory.push("後門鑰匙");
@@ -464,62 +450,39 @@
         location: "房間",
         speaker: "旁白",
         text: "不知道為什麼，你很快的就進入了夢鄉。",
-        charImg: "",
-        bg:"ChatGPT Image 2026年2月5日 上午11_55_39.png",
         choices: [{ text: "點擊繼續", next: "day1" }]
       },
       day1: {
         location: "棉花田",
         speaker: "馮教官",
-        text: "各位，今天是你們第一天工作，我們來看看這個告示板，這會讓你知道你要幹嘛。",
+        text: "各位，今天是第一天工作，認真採棉花，國家才可以賺錢。",
         charImg: "Feng.png",
         bg:"cotton fields.png",
         action: () => { playerState.day = 2; }, 
-        choices: [{ text: "點擊繼續", next: "next3" }]
-      },
-      next3: {
-        location: "棉花田",
-        speaker: "馮教官",
-        text: "ㄜ，他說。",
-        charImg: "Feng.png",
-        bg:"cotton fields.png",
-        choices: [{ text: "點擊繼續", next: "next4" }]
-      },
-      next4: {
-        location: "棉花田",
-        speaker: "馮教官",
-        text: "你們要認真採棉花，這樣就國家才可以賺錢，快去吧。",
-        charImg: "Feng.png",
-        bg:"cotton fields.png",
         choices: [
           { text: "採很多", next: "many" },
-          { text: "偷懶一下，只採一點", next: "little" },
-          { text: "不動", next: "nomove2" }]
+          { text: "偷懶一下", next: "little" },
+          { text: "不動", next: "nomove2" }
+        ]
       },
       many: {
         location: "棉花田",
         speaker: "馮教官",
-        text: "正確答案，採這麼多棉花就可以讓國家賺很多錢.這是給你的獎勵。",
-        charImg: "Feng.png",
-        bg:"cotton fields.png",
+        text: "採這麼多棉花，這是給你的獎勵。",
         action: () => { playerState.credit += 1; playerState.money += 100; },
         choices: [{ text: "回房間", next: "story2" }]
       },
       little: {
         location: "棉花田",
         speaker: "馮教官",
-        text: "我的小老師，你們會不會有點太偷懶了。沒關係，就當我老花沒看到。所以你還是有獎勵。",
-        charImg: "Feng.png",
-        bg:"cotton fields.png",
+        text: "有點太偷懶了，但算了，還是給你點獎勵。",
         action: () => { playerState.money += 50; },
         choices: [{ text: "回房間", next: "story2" }]
       },
       nomove2: {
         location: "棉花田",
         speaker: "馮教官",
-        text: "你站在這邊幹嘛，我很帥嗎?",
-        charImg: "Feng.png",
-        bg:"cotton fields.png",
+        text: "你站在這邊幹嘛？",
         action: () => { playerState.credit -= 1; },
         choices: [{ text: "回房間", next: "story2" }]
       },
@@ -527,8 +490,6 @@
         location: "房間",
         speaker: "旁白",
         text: "回到房間，你想怎麼做？",
-        charImg: "",
-        bg:"ChatGPT Image 2026年2月5日 上午11_55_39.png",
         choices: [
           { text: "跟鄰居打好關係", next: "makefriend" },
           { text: "休息", next: "sleep2" }
@@ -543,48 +504,47 @@
       sleep2: {
         location: "房間",
         speaker: "旁白",
-        text: "不知道為什麼，你很快的就進入了夢鄉。",
-        charImg: "",
-        bg:"ChatGPT Image 2026年2月5日 上午11_55_39.png",
+        text: "你休息了一晚。",
         choices: [{ text: "點擊繼續", next: "day2" }]
       },
       day2: {
         location: "勞改營廣播",
         speaker: "廣播",
-        text: "全體集合！今天是新的一天，今天要來體能訓練！",
-        charImg: ""
+        text: "全體集合！今天要來體能訓練！",
+        charImg: "",
         action: () => { playerState.day = 3; }, 
         choices: [{ text: "點擊繼續", next: "next5" }]
       },
       next5: {
         location: "勞改營內部",
         speaker: "陳教官",
-        text: "我們今天要跑1600，跑太慢會有懲罰歐！有人要跑嗎？",
-        charImg: ""
+        text: "跑太慢會有懲罰歐！有人要跑嗎？",
+        charImg: "",
         choices: [
           { text: "好，沒問題", next: "next6" },
-          { text: "不要", next: "toomanyquestions" }]
+          { text: "不要", next: "toomanyquestions" }
+        ]
       },
       next6: {
         location: "勞改營內部",
         speaker: "陳教官",
         text: "預備，開始！",
-        charImg: ""
+        charImg: "",
         choices: [{ text: "點擊繼續", next: "next7" }]
       },
       next7: {
         location: "勞改營內部",
         speaker: "謝同志",
         text: "呼呼呼，我好喘喔",
-        charImg: ""
+        charImg: "",
         choices: [{ text: "點擊繼續", next: "next8" }]
       },
       next8: {
         location: "勞改營內部",
         speaker: "旁白",
-        text: "蹦的一聲，謝同志因跑太慢被消失了",
-        charImg: ""
-        choices: [{ text: "點擊繼續", next: "next9" }]
+        text: "蹦的一聲，謝同志被消失了",
+        charImg: "",
+        choices: [{ text: "重新開始", next: "reset_game" }]
       },
       toomanyquestions: {
         location: "勞改營內部",
@@ -594,11 +554,10 @@
         choices: [{ text: "點擊繼續", next: "next5" }]
       },
       game_over_credit: {
-        location: "勞改營陰暗的角落",
+        location: "陰暗角落",
         speaker: "士兵",
-        text: "你被主席認定為無法教化的人。看來你不想活了，讓我助你一臂之力吧。",
+        text: "主席認定你無法教化。再見了。",
         charImg: "soldier.png",
-        bg:"ChatGPT Image 2026年2月5日 上午11_55_39.png",
         choices: [{ text: "重新開始", next: "reset_game" }]
       }
     };
@@ -607,8 +566,6 @@
       document.getElementById('ui-credit').textContent = playerState.credit;
       document.getElementById('ui-money').textContent = playerState.money;
       document.getElementById('ui-quest').textContent = playerState.quests[playerState.quests.length - 1] || "無";
-      
-      // 更新日期
       document.getElementById('game-day').textContent = `第 ${playerState.day} 天`;
       document.getElementById('ui-day-alt').textContent = playerState.day;
 
@@ -636,9 +593,9 @@
         nodeId = 'start';
       }
 
-      playerState.currentNode = nodeId; 
       const node = nodes[nodeId];
       if (!node) return;
+      playerState.currentNode = nodeId; 
 
       if (node.action) node.action();
       updateUI();
@@ -648,7 +605,6 @@
         return;
       }
 
-      // 切換背景圖
       if (node.bg) {
         document.getElementById('game-main').style.backgroundImage = `url('${node.bg}')`;
       }
@@ -656,8 +612,7 @@
       document.getElementById('location').textContent = node.location;
       document.getElementById('speaker').textContent = node.speaker;
       
-      const dialogueEl = document.getElementById('dialogue');
-      typeWriter(dialogueEl, node.text, 30);
+      typeWriter(document.getElementById('dialogue'), node.text, 30);
   
       const charImg = document.getElementById('char-img');
       if (node.charImg) {
@@ -684,36 +639,23 @@
       panel.style.display = (panel.style.display === 'block') ? 'none' : 'block';
     }
 
+    function saveGame() {
+      localStorage.setItem('escape_labor_camp_save', JSON.stringify(playerState));
+      alert("存檔成功");
+    }
+
+    function loadGame() {
+      const data = localStorage.getItem('escape_labor_camp_save');
+      if (data) {
+        playerState = JSON.parse(data);
+        renderNode(playerState.currentNode);
+        alert("讀檔成功");
+      }
+    }
+
     window.onload = () => {
       typeWriter(document.getElementById('intro-content'), introLines[0].text);
     };
-
-    function saveGame() {
-      try {
-        const saveData = JSON.stringify(playerState);
-        localStorage.setItem('escape_labor_camp_save', saveData);
-        alert("進度已儲存！");
-      } catch (e) {
-        alert("存檔失敗。");
-      }
-    }
-    
-    function loadGame() {
-      const saveData = localStorage.getItem('escape_labor_camp_save');
-      if (!saveData) {
-        alert("找不到任何存檔！");
-        return;
-      }
-      try {
-        playerState = JSON.parse(saveData);
-        if (document.getElementById('inventory-panel').style.display === 'block') toggleInventory();
-        renderNode(playerState.currentNode);
-        alert("進度已載入！");
-      } catch (e) {
-        alert("存檔檔案損毀。");
-      }
-    }
   </script>
 </body>
-</html>
 </html>
