@@ -559,7 +559,7 @@
       next5: {
         location: "勞改營內部",
         speaker: "陳教官",
-        text: "我們今天要跑1600，跑太慢會有懲罰歐！有人要跑嗎？",
+        text: "我們今天要跑1600，跑太慢會有懲罰歐，但是第一名有獎勵！有人要跑嗎？",
         charImg: "", 
         choices: [
           { text: "好，沒問題", next: "next6" },
@@ -583,8 +583,8 @@
         location: "勞改營內部",
         speaker: "旁白",
         text: "蹦的一聲，謝同志因跑太慢被消失了",
-        charImg: "", // 修正點：補上逗號
-        choices: [{ text: "點擊繼續", next: "next9" }]
+        charImg: "",
+        choices: [{ text: "點擊繼續", next: "next10" }]
       },
       toomanyquestions: {
         location: "勞改營內部",
@@ -599,6 +599,13 @@
         text: "你給我跑",
         charImg: "", 
         choices: [{ text: "點擊繼續", next: "next6" }]
+      },
+      next10: {
+        location: "勞改營內部",
+        speaker: "旁白",
+        text: "經過你的努力，終於逃離這場大逃殺",
+        charImg: "",
+        choices: [{ text: "點擊繼續", next: "next11" }]
       },
       game_over_credit: {
         location: "勞改營陰暗的角落",
