@@ -621,6 +621,25 @@
         charImg: "",
         choices: [{ text: "點擊繼續", next: "next12" }]
       },
+      // 隱藏結局：社會信用達標
+      ending_credit: {
+        location: "勞改營大門",
+        speaker: "楊主席",
+        text: "你的表現非常優異，充分展現了教化的成果。你現在自由了，去向世人傳頌這裡的美好吧。",
+        charImg: "yang.png", // 假設你有主席的圖
+        bg: "freedom_gate.png",
+        choices: [{ text: "迎向自由（重新開始）", next: "reset_game" }]
+      },
+      // 隱藏結局：第十天被教化
+      ending_indoctrinated: {
+        location: "洗腦教室",
+        speaker: "旁白",
+        text: "第十天到了。你的眼神已經失去了光芒，你覺得這裡就是家，勞動就是快樂。你永遠離不開了。",
+        charImg: "",
+        bg: "classroom.png",
+        choices: [{ text: "成為模範勞工（重新開始）", next: "reset_game" }]
+      },
+      // 隱藏結局:死亡
       game_over_credit: {
         location: "勞改營陰暗的角落",
         speaker: "士兵",
@@ -669,12 +688,31 @@
       if (!node) return;
 
       if (node.action) node.action();
-      updateUI();
-
+      
+      // --- 結局判斷邏輯開始 ---
+      
+      // 1. 檢查社會信用點數 (劇情 1)
+      if (playerState.credit >= 20 && nodeId !== 'ending_credit') {
+        renderNode('ending_credit');
+        return;
+      }
+      
+      // 2. 檢查信用過低 (原有邏輯)
       if (playerState.credit <= 0 && nodeId !== 'game_over_credit') {
         renderNode('game_over_credit');
         return;
       }
+
+      // 3. 檢查第十天 (劇情 2)
+      // 注意：這裡假設你希望在第 10 天一到就觸發
+      if (playerState.day >= 10 && nodeId !== 'ending_indoctrinated') {
+        renderNode('ending_indoctrinated');
+        return;
+      }
+
+      // --- 結局判斷邏輯結束 ---
+
+      updateUI();
 
       // 切換背景圖
       if (node.bg) {
