@@ -538,7 +538,7 @@
         location: "房間",
         speaker: "鄰居",
         text: "嘿，小聲點... 我聽說後門那邊守備比較鬆...",
-        choices: [{ text: "點擊繼續", next: "story2" }]
+        choices: [{ text: "點擊繼續", next: "sleep2" }]
       },
       sleep2: {
         location: "房間",
@@ -636,7 +636,7 @@
         text:"這是世界上最美（難）味（吃）的螢光咖喱（廚餘）了，你因為吃了這一餐而暈倒，損失50元",
         charImg: "",
         action: () => {playerState.money -= 50;},
-        choices: [{ text: "繼續遊戲", next: "day4" }]
+        choices: [{ text: "繼續遊戲", next: "sleep3" }]
       },
       noeat: {
         location: "房間",
@@ -648,12 +648,20 @@
       next13: {
         location: "房間",
         speaker: "神秘人",
-        text: "你是要我吐口水在你的飯裡嗎",
+        text: "你是要我吐口水在你的飯裡嗎，不准講話",
         charImg: "",
-        action: () => { playerState.credit -= 5; },
-        choices: [{ text: "點擊繼續", next: "" }]
+        action: () => { playerState.credit -= 4; },
+        choices: [{ text: "點擊繼續", next: "sleep3" }]
       },
-      story5: {
+      sleep3: {
+        location: "房間",
+        speaker: "旁白",
+        text: "不知道為什麼，你很快的就進入了夢鄉。",
+        charImg: "",
+        bg:"ChatGPT Image 2026年2月5日 上午11_55_39.png",
+        choices: [{ text: "點擊繼續", next: "day4" }]
+      },
+      story9: {
         location: "房間",
         speaker: "旁白",
         text: "今天是個月黑高夜晚，很適合逃離這裡，你該怎麼做",
