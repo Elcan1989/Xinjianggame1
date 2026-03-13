@@ -225,7 +225,7 @@
 
   <div id="intro-overlay" onclick="nextIntro()">
     <img id="intro-img" src="" style="max-width: 80%; max-height: 60%; margin-bottom: 20px; display: none; transition: opacity 0.5s ease;">
-    <div class="intro-text" id="intro-content">內容載入中(ERROR)...</div>
+    <div class="intro-text" id="intro-content">內容載入中(ERROR1)...</div>
     <div class="click-hint">點擊螢幕繼續</div>
   </div>
 
@@ -799,7 +799,7 @@
 
     function handleRandomEvent() {
       const eventList = ['event_search', 'event_propaganda', 'event_hardwork'];
-      const randomEvent = eventList[Math.floor(Math.random() * eventList.length)];
+      const randomEvent = eventList[Math.floor(Math.random() * eventList.length)];}
       
     function renderNode(nodeId) {
       if(nodeId === 'reset_game') {
