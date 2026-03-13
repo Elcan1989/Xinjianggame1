@@ -755,10 +755,16 @@
     function updateUI() {
       document.getElementById('ui-credit').textContent = playerState.credit;
       document.getElementById('ui-money').textContent = playerState.money;
-      document.getElementById('ui-quest').textContent = playerState.quests[playerState.quests.length - 1] || "無";
+
+      // 修正後的安全寫法：先確認 playerState.quests 存在且有長度
+      const currentQuest = (playerState.quests && playerState.quests.length > 0) 
+        ? playerState.quests[playerState.quests.length - 1] 
+        : "無";
+    
+      document.getElementById('ui-quest').textContent = currentQuest;
       document.getElementById('game-day').textContent = `第 ${playerState.day} 天`;
       document.getElementById('ui-day-alt').textContent = playerState.day;
-
+      
       const grid = document.getElementById('item-grid');
       grid.innerHTML = "";
       for (let i = 0; i < 8; i++) {
@@ -781,8 +787,11 @@
       const eventList = ['event_search', 'event_propaganda', 'event_hardwork'];
       const randomEvent = eventList[Math.floor(Math.random() * eventList.length)];
   
-      // 偵錯用：如果畫面上還是白的，請按 F12 檢查 Console 是否有噴錯
-      console.log("觸發隨機事件:", randomEvent); 
+      if (!nodes[randomEvent]) {
+        console.error("找不到事件節點:", randomEvent);
+        renderNode('story1'); // 如果出錯，至少把玩家送回房間
+        return;
+      }
   
       renderNode(randomEvent);
     }
