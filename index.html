@@ -829,7 +829,21 @@
         action: () => { playerState.credit -= 1; },
         choices: [{ text: "休息", next: "story7" }]
       },
-      
+      story7: {
+        location: "房間",
+        speaker: "旁白",
+        text: "音樂課真是有趣啊🙄",
+        charImg: "",
+        choices: [{ text: "點擊繼續", next: "sleep7" }]
+      },
+      sleep7: {
+        location: "房間",
+        speaker: "旁白",
+        text: "不知道為什麼，你很快的就進入了夢鄉。",
+        charImg: "",
+        bg:"ChatGPT Image 2026年2月5日 上午11_55_39.png",
+        choices: [{ text: "點擊繼續", next: "day8" }]
+      },
       story9: {
         location: "房間",
         speaker: "旁白",
