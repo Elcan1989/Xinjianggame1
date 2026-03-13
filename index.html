@@ -770,10 +770,41 @@
         speaker: "張教官",
         text: "今天每個人延後休息，要多搬200瓶水跟100箱奇異果，沒搬不完不准吃飯！",
         charImg: "",
-        action: () => { playerState.money += 40; },
-        choices: [{ text: "埋頭苦幹", next: "" }]
+        choices: [{ text: "埋頭苦幹", next: "next18" }
+                 { text: "偷懶", next: "next19" }]
       },
-
+      next18: {
+        location: "陽台",
+        speaker: "張教官",
+        text: "好，下班",
+        charImg: "",
+        choices: [{ text: "休息", next: "" }]
+      },
+      next19: {
+        location: "陽台",
+        speaker: "張教官",
+        text: "第一天進來就要造反嗎？我再給你最後一次機會！你忘記教官會發火了嗎？",
+        charImg: "",
+        action: () => { playerState.credit -= 2; },
+        choices: [{ text: "埋頭苦幹", next: "next18" }
+                 { text: "偷懶", next: "next19" }]
+      },
+      story6: {
+        location: "房間",
+        speaker: "旁白",
+        text: "雖然張教官很討厭，但是還是敷衍一下好了",
+        charImg: "",
+        choices: [{ text: "點擊繼續", next: "sleep6" }]
+      },
+      sleep5: {
+        location: "房間",
+        speaker: "旁白",
+        text: "不知道為什麼，你很快的就進入了夢鄉。",
+        charImg: "",
+        bg:"ChatGPT Image 2026年2月5日 上午11_55_39.png",
+        choices: [{ text: "點擊繼續", next: "day7" }]
+      },
+      
       story9: {
         location: "房間",
         speaker: "旁白",
