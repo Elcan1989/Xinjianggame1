@@ -804,6 +804,31 @@
         bg:"ChatGPT Image 2026年2月5日 上午11_55_39.png",
         choices: [{ text: "點擊繼續", next: "day7" }]
       },
+      day7: {
+        location: "音樂教室",
+        speaker: "林教官",
+        text: "在勞改還是要上音樂的",
+        charImg: "", 
+        action: () => { playerState.day = 7; }, 
+        choices: [{ text: "認真上課", next: "next20" },
+                 { text: "管他的，我要聊天", next: "next21" }]
+      },
+      next20: {
+        location: "音樂教室",
+        speaker: "林教官",
+        text: "好，下班",
+        charImg: "",
+        action: () => { playerState.credit += 1; },
+        choices: [{ text: "下課", next: "story7" }]
+      },
+      next21: {
+        location: "音樂教室",
+        speaker: "張教官",
+        text: "再吵就給我閉嘴",
+        charImg: "",
+        action: () => { playerState.credit -= 1; },
+        choices: [{ text: "休息", next: "story7" }]
+      },
       
       story9: {
         location: "房間",
@@ -818,7 +843,7 @@
         location: "勞改營大門",
         speaker: "楊主席",
         text: "你的表現非常優異，充分展現了教化的成果。你現在自由了，去向世人傳頌這裡的美好吧。",
-        charImg: "yang.png", // 假設你有主席的圖
+        charImg: "yang.png", 
         bg: "freedom_gate.png",
         choices: [{ text: "迎向自由（重新開始）", next: "reset_game" }]
       },
@@ -884,7 +909,7 @@
       // --- 結局判斷邏輯開始 ---
       
       // 1. 檢查社會信用點數 (劇情 1)
-      if (playerState.credit >= 20 && nodeId !== 'ending_credit') {
+      if (playerState.credit >= 10 && nodeId !== 'ending_credit') {
         renderNode('ending_credit');
         return;
       }
