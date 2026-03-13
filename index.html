@@ -434,7 +434,7 @@
         charImg: "",
         bg:"ChatGPT Image 2026年2月5日 上午11_55_39.png",
         choices: [
-          { text: "檢查床鋪", next: "check_bed" },
+          { text: "檢查床鋪", next: "check_bed", condition: () => playerState.inventory >= 鐵絲},
           { text: "賄賂守衛 ($50)", next: "bribe_success", condition: () => playerState.money >= 50 },
           { text: "休息", next: "sleep1" }
         ]
