@@ -663,8 +663,8 @@
         action: () => { playerState.day = 4; }, // 強制設定天數為 4
         choices: [{ text: "開始新的一天", next: "random_trigger" }]
       },
-      random_trigger: {
-        action: () => { handleRandomEvent(); }
+      trigger_event: {
+        action: () => { handleRandomEvent(); } // 這裡執行完後，handleRandomEvent 會呼叫下一個 renderNode
       },
       event_search: {
         location: "宿舍",
@@ -780,6 +780,10 @@
     function handleRandomEvent() {
       const eventList = ['event_search', 'event_propaganda', 'event_hardwork'];
       const randomEvent = eventList[Math.floor(Math.random() * eventList.length)];
+  
+      // 偵錯用：如果畫面上還是白的，請按 F12 檢查 Console 是否有噴錯
+      console.log("觸發隨機事件:", randomEvent); 
+  
       renderNode(randomEvent);
     }
       
