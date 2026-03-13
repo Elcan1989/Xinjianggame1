@@ -192,7 +192,6 @@
 
     .item-slot img { width: 35px; height: 35px; margin-bottom: 4px; }
     
-    /* 日期與地點顯示層 */
     .ui-top-right {
       position: absolute;
       top: 20px;
@@ -225,7 +224,7 @@
 
   <div id="intro-overlay" onclick="nextIntro()">
     <img id="intro-img" src="" style="max-width: 80%; max-height: 60%; margin-bottom: 20px; display: none; transition: opacity 0.5s ease;">
-    <div class="intro-text" id="intro-content">內容載入中(ERROR1)...</div>
+    <div class="intro-text" id="intro-content">內容載入中(ERROR)...</div>
     <div class="click-hint">點擊螢幕繼續</div>
   </div>
 
@@ -351,7 +350,7 @@
       }
     }
 
-    // --- 遊戲核心邏輯 ---
+    // --- 遊戲核心數據 ---
     const nodes = {
       start: {
         location: "勞改營入口",
@@ -669,7 +668,7 @@
       },
 
       random_trigger: {
-        action: () => { handleRandomEvent(); } // 這裡會執行下方的 JS 邏輯
+        action: () => { handleRandomEvent(); }
       },
 
       // --- 隨機事件池 ---
@@ -681,7 +680,6 @@
         action: () => {
           if (playerState.inventory.includes("鐵絲")) {
             playerState.credit -= 5;
-            // 沒收道具
             playerState.inventory = playerState.inventory.filter(item => item !== "鐵絲");
           }
         },
@@ -692,7 +690,7 @@
         speaker: "楊主席 (大「屏」公播)",
         text: "打掃是為了做功德，聽主席的話是為了讓你更厲害...",
         choices: [{ text: "認真聽", next: "listen1" },
-                 { text: "不認真聽", next: "nolisten1" }]
+                  { text: "不認真聽", next: "nolisten1" }]
       },
       listen1: {
         location: "大講堂",
@@ -726,31 +724,19 @@
       day_cycle_check: {
         action: () => {
           playerState.day += 1;
-          if (playerState.day >= 10) {
-            renderNode('ending_indoctrinated');
-          } else {
-            renderNode('random_trigger');
-          }
-        }
+          // 此處邏輯會由 renderNode 的結局檢查處理
+        },
+        choices: [{ text: "點擊繼續", next: "random_trigger" }]
       },
-      // --- 隨機事件池結束 ---
-      story9: {
-        location: "房間",
-        speaker: "旁白",
-        text: "今天是個月黑高夜晚，很適合逃離這裡，你該怎麼做",
-        charImg: "",
-        choices: [{ text: "點擊繼續", next: "" }]
-      },
-      // 隱藏結局：社會信用達標
+
       ending_credit: {
         location: "勞改營大門",
         speaker: "楊主席",
         text: "你的表現非常優異，充分展現了教化的成果。你現在自由了，去向世人傳頌這裡的美好吧。",
-        charImg: "yang.png", // 假設你有主席的圖
+        charImg: "yang.png",
         bg: "freedom_gate.png",
         choices: [{ text: "迎向自由（重新開始）", next: "reset_game" }]
       },
-      // 隱藏結局：第十天被教化
       ending_indoctrinated: {
         location: "洗腦教室",
         speaker: "旁白",
@@ -759,7 +745,6 @@
         bg: "classroom.png",
         choices: [{ text: "成為模範勞工（重新開始）", next: "reset_game" }]
       },
-      // 隱藏結局:死亡
       game_over_credit: {
         location: "勞改營陰暗的角落",
         speaker: "士兵",
@@ -770,12 +755,12 @@
       }
     };
     
+    // --- 核心 logic 修正整合 ---
+
     function updateUI() {
       document.getElementById('ui-credit').textContent = playerState.credit;
       document.getElementById('ui-money').textContent = playerState.money;
       document.getElementById('ui-quest').textContent = playerState.quests[playerState.quests.length - 1] || "無";
-      
-      // 更新日期
       document.getElementById('game-day').textContent = `第 ${playerState.day} 天`;
       document.getElementById('ui-day-alt').textContent = playerState.day;
 
@@ -799,7 +784,9 @@
 
     function handleRandomEvent() {
       const eventList = ['event_search', 'event_propaganda', 'event_hardwork'];
-      const randomEvent = eventList[Math.floor(Math.random() * eventList.length)];}
+      const randomEvent = eventList[Math.floor(Math.random() * eventList.length)];
+      renderNode(randomEvent);
+    }
       
     function renderNode(nodeId) {
       if(nodeId === 'reset_game') {
@@ -813,38 +800,28 @@
 
       if (node.action) node.action();
       
-      // --- 結局判斷邏輯開始 ---
-      
-      // 1. 檢查社會信用點數 (劇情 1)
-      if (playerState.credit >= 20 && nodeId !== 'ending_credit') {
-        renderNode('ending_credit');
-        return;
-      }
-      
-      // 2. 檢查信用過低 (原有邏輯)
+      // --- 結局判斷邏輯 ---
       if (playerState.credit <= 0 && nodeId !== 'game_over_credit') {
         renderNode('game_over_credit');
         return;
       }
-
-      // 3. 檢查第十天 (劇情 2)
-      // 注意：這裡假設你希望在第 10 天一到就觸發
-      if (playerState.day >= 10 && nodeId !== 'ending_indoctrinated') {
+      if (playerState.credit >= 20 && nodeId !== 'ending_credit') {
+        renderNode('ending_credit');
+        return;
+      }
+      if (playerState.day >= 10 && !nodeId.startsWith('ending') && nodeId !== 'game_over_credit') {
         renderNode('ending_indoctrinated');
         return;
       }
 
-      // --- 結局判斷邏輯結束 ---
-
       updateUI();
 
-      // 切換背景圖
       if (node.bg) {
         document.getElementById('game-main').style.backgroundImage = `url('${node.bg}')`;
       }
 
-      document.getElementById('location').textContent = node.location;
-      document.getElementById('speaker').textContent = node.speaker;
+      document.getElementById('location').textContent = node.location || "";
+      document.getElementById('speaker').textContent = node.speaker || "";
       
       const dialogueEl = document.getElementById('dialogue');
       typeWriter(dialogueEl, node.text, 30);
@@ -859,14 +836,16 @@
 
       const choicesEl = document.getElementById('choices');
       choicesEl.innerHTML = "";
-      node.choices.forEach(choice => {
-        if (choice.condition && !choice.condition()) return;
-        const btn = document.createElement('button');
-        btn.className = "choice-btn";
-        btn.textContent = choice.text;
-        btn.onclick = () => renderNode(choice.next);
-        choicesEl.appendChild(btn);
-      });
+      if (node.choices) {
+        node.choices.forEach(choice => {
+          if (choice.condition && !choice.condition()) return;
+          const btn = document.createElement('button');
+          btn.className = "choice-btn";
+          btn.textContent = choice.text;
+          btn.onclick = () => renderNode(choice.next);
+          choicesEl.appendChild(btn);
+        });
+      }
     }
 
     function toggleInventory() {
