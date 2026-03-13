@@ -677,9 +677,16 @@
         speaker: "張教官",
         text: "突擊檢查！所有人站到牆邊！要是讓我搜到違禁品，你們就死定了！",
         charImg: "chang.png",
+        choices: [{ text: "（心驚膽顫地接受檢查）", next: "event_search1" }]
+      },
+      event_search1: {
+        location: "宿舍",
+        speaker: "張教官",
+        text: "下一位",
+        charImg: "chang.png",
         action: () => {
           if (playerState.inventory.includes("鐵絲")) {
-            playerState.credit -= 5;
+            playerState.credit -= 4;
             playerState.inventory = playerState.inventory.filter(item => item !== "鐵絲");
           }
         },
