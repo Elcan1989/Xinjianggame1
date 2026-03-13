@@ -619,7 +619,7 @@
         speaker: "陳教官",
         text: "第一名是我的愛徒，他太棒了，我要給他三十點",
         charImg: "",
-        choices: [{ text: "點擊繼續", next: "story3" }]
+        choices: [{ text: "點擊繼續", next: "story4" }]
       },
       story4: {
         location: "房間",
@@ -628,15 +628,30 @@
         charImg: "",
         choices: [
           { text: "吃", next: eat" },
-          { text: "不吃", next: "noeat" }
-                 ]
+          { text: "不吃", next: "noeat" }]
       },
       eat: {
         location: "房間",
         speaker: "旁白",
         text:"這是世界上最美（難）味（吃）的螢光咖喱（廚餘）了，你因為吃了這一餐而暈倒，損失50元",
         charImg: "",
+        action: () => {playerState.money -= 50;},
         choices: [{ text: "繼續遊戲", next: "day4" }]
+      },
+      noeat: {
+        location: "房間",
+        speaker: "旁白",
+        text:"因為你不想吃美(噁)味(心)的螢光咖哩，所以你就去跟隔壁的鄰居聊天",
+        charImg: "",
+        choices: [{ text: "繼續遊戲", next: "next12" }]
+      },
+      next11: {
+        location: "房間",
+        speaker: "神秘人",
+        text: "你是要我吐口水在你的飯裡嗎",
+        charImg: "",
+        action: () => { playerState.credit -= 5; },
+        choices: [{ text: "點擊繼續", next: "" }]
       },
       story5: {
         location: "房間",
