@@ -661,6 +661,79 @@
         bg:"ChatGPT Image 2026年2月5日 上午11_55_39.png",
         choices: [{ text: "點擊繼續", next: "day4" }]
       },
+      day4: {
+        location: "房間",
+        speaker: "旁白",
+        text: "第 4 天開始了，勞改營的生活變得更加難以預測...",
+        choices: [{ text: "開始新的一天", next: "random_trigger" }]
+      },
+
+      random_trigger: {
+        action: () => { handleRandomEvent(); } // 這裡會執行下方的 JS 邏輯
+      },
+
+      // --- 隨機事件池 ---
+      event_search: {
+        location: "宿舍",
+        speaker: "張教官",
+        text: "突擊檢查！所有人站到牆邊！要是讓我搜到違禁品，你們就死定了！",
+        charImg: "chang.png",
+        action: () => {
+          if (playerState.inventory.includes("鐵絲")) {
+            playerState.credit -= 5;
+            // 沒收道具
+            playerState.inventory = playerState.inventory.filter(item => item !== "鐵絲");
+          }
+        },
+        choices: [{ text: "（心驚膽顫地接受檢查）", next: "event_end" }]
+      },
+      event_propaganda: {
+        location: "大講堂",
+        speaker: "楊主席 (大「屏」公播)",
+        text: "打掃是為了做功德，聽主席的話是為了讓你更厲害...",
+        choices: [{ text: "認真聽", next: "listen1" },
+                 { text: "不認真聽", next: "nolisten1" }]
+      },
+      listen1: {
+        location: "大講堂",
+        speaker: "楊主席 (大「屏」公播)",
+        text: "你們都懂了嗎",
+        action: () => { playerState.credit += 2; },
+        choices: [{ text: "休息", next: "event_end" }]
+      },
+      nolisten1: {
+        location: "大講堂",
+        speaker: "楊主席 (大「屏」公播)",
+        text: "你當作再聽故事(ㄕ˙)嗎?",
+        action: () => { playerState.credit -= 2; },
+        choices: [{ text: "休息", next: "event_end" }]
+      },
+      event_hardwork: {
+        location: "採石場",
+        speaker: "張教官",
+        text: "今天每個人延後休息要多搬200瓶水跟100箱奇異果，沒搬不完不准吃飯！",
+        action: () => { playerState.money += 40; },
+        choices: [{ text: "埋頭苦幹", next: "event_end" }]
+      },
+
+      event_end: {
+        location: "房間",
+        speaker: "旁白",
+        text: "這一天終於結束了，你感到筋疲力竭。",
+        choices: [{ text: "休息", next: "day_cycle_check" }]
+      },
+
+      day_cycle_check: {
+        action: () => {
+          playerState.day += 1;
+          if (playerState.day >= 10) {
+            renderNode('ending_indoctrinated');
+          } else {
+            renderNode('random_trigger');
+          }
+        }
+      },
+      // --- 隨機事件池結束 ---
       story9: {
         location: "房間",
         speaker: "旁白",
@@ -724,6 +797,10 @@
       }
     }
 
+    function handleRandomEvent() {
+      const eventList = ['event_search', 'event_propaganda', 'event_hardwork'];
+      const randomEvent = eventList[Math.floor(Math.random() * eventList.length)];
+      
     function renderNode(nodeId) {
       if(nodeId === 'reset_game') {
         playerState = { day: 1, credit: 3, money: 100, inventory: [], quests: [], currentNode: 'start' };
