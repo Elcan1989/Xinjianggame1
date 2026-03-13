@@ -224,7 +224,7 @@
 
   <div id="intro-overlay" onclick="nextIntro()">
     <img id="intro-img" src="" style="max-width: 80%; max-height: 60%; margin-bottom: 20px; display: none; transition: opacity 0.5s ease;">
-    <div class="intro-text" id="intro-content">內容載入中(ERROR)...</div>
+    <div class="intro-text" id="intro-content">內容載入中...</div>
     <div class="click-hint">點擊螢幕繼續</div>
   </div>
 
@@ -263,7 +263,6 @@
   </main>
 
   <script>
-    // --- 遊戲狀態 ---
     let playerState = { day: 1, credit: 3, money: 100, inventory: [], quests: [], currentNode: 'start'};
     let currentIntroIndex = 0;
     let isTyping = false;
@@ -287,7 +286,6 @@
       "後門鑰匙": "https://cdn-icons-png.flaticon.com/512/3082/3082043.png"
     };
 
-    // --- 打字機邏輯 ---
     function typeWriter(element, text, speed = 60) {
       clearInterval(timer);
       fullText = text;
@@ -313,7 +311,6 @@
       document.querySelector('.click-hint').style.opacity = 1;
     }
 
-    // --- 前情提要導航 ---
     function nextIntro() {
       const content = document.getElementById('intro-content');
       const introImg = document.getElementById('intro-img');
@@ -350,7 +347,6 @@
       }
     }
 
-    // --- 遊戲核心數據 ---
     const nodes = {
       start: {
         location: "勞改營入口",
@@ -666,12 +662,9 @@
         text: "第 4 天開始了，勞改營的生活變得更加難以預測...",
         choices: [{ text: "開始新的一天", next: "random_trigger" }]
       },
-
       random_trigger: {
         action: () => { handleRandomEvent(); }
       },
-
-      // --- 隨機事件池 ---
       event_search: {
         location: "宿舍",
         speaker: "張教官",
@@ -690,14 +683,16 @@
             playerState.inventory = playerState.inventory.filter(item => item !== "鐵絲");
           }
         },
-        choices: [{ text: "（心驚膽顫地接受檢查）", next: "event_end" }]
+        choices: [{ text: "點擊繼續", next: "event_end" }]
       },
       event_propaganda: {
         location: "大講堂",
         speaker: "楊主席 (大「屏」公播)",
         text: "打掃是為了做功德，聽主席的話是為了讓你更厲害...",
-        choices: [{ text: "認真聽", next: "listen1" },
-                  { text: "不認真聽", next: "nolisten1" }]
+        choices: [
+          { text: "認真聽", next: "listen1" },
+          { text: "不認真聽", next: "nolisten1" }
+        ]
       },
       listen1: {
         location: "大講堂",
@@ -714,28 +709,22 @@
         choices: [{ text: "休息", next: "event_end" }]
       },
       event_hardwork: {
-        location: "採石場",
+        location: "陽台",
         speaker: "張教官",
         text: "今天每個人延後休息要多搬200瓶水跟100箱奇異果，沒搬不完不准吃飯！",
         action: () => { playerState.money += 40; },
         choices: [{ text: "埋頭苦幹", next: "event_end" }]
       },
-
       event_end: {
         location: "房間",
         speaker: "旁白",
         text: "這一天終於結束了，你感到筋疲力竭。",
         choices: [{ text: "休息", next: "day_cycle_check" }]
       },
-
       day_cycle_check: {
-        action: () => {
-          playerState.day += 1;
-          // 此處邏輯會由 renderNode 的結局檢查處理
-        },
+        action: () => { playerState.day += 1; },
         choices: [{ text: "點擊繼續", next: "random_trigger" }]
       },
-
       ending_credit: {
         location: "勞改營大門",
         speaker: "楊主席",
@@ -761,8 +750,6 @@
         choices: [{ text: "重新開始", next: "reset_game" }]
       }
     };
-    
-    // --- 核心 logic 修正整合 ---
 
     function updateUI() {
       document.getElementById('ui-credit').textContent = playerState.credit;
@@ -807,7 +794,7 @@
 
       if (node.action) node.action();
       
-      // --- 結局判斷邏輯 ---
+      // 結局檢查
       if (playerState.credit <= 0 && nodeId !== 'game_over_credit') {
         renderNode('game_over_credit');
         return;
@@ -829,7 +816,6 @@
 
       document.getElementById('location').textContent = node.location || "";
       document.getElementById('speaker').textContent = node.speaker || "";
-      
       const dialogueEl = document.getElementById('dialogue');
       typeWriter(dialogueEl, node.text, 30);
   
