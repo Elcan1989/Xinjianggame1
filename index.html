@@ -284,7 +284,7 @@
     ];
 
     const itemDatabase = {
-      "鐵絲": "https://cdn-icons-png.flaticon.com/512/100/100514.png",
+      "手機": "https://cdn-icons-png.flaticon.com/512/100/100514.png",
       "後門鑰匙": "https://cdn-icons-png.flaticon.com/512/3082/3082043.png"
     };
 
@@ -434,7 +434,7 @@
         charImg: "",
         bg:"ChatGPT Image 2026年2月5日 上午11_55_39.png",
         choices: [
-          { text: "檢查床鋪", next: "check_bed", condition: () => !playerState.inventory.includes("鐵絲")},
+          { text: "檢查床鋪", next: "check_bed", condition: () => !playerState.inventory.includes("手機")},
           { text: "賄賂守衛 ($50)", next: "bribe_success", condition: () => playerState.money >= 50 },
           { text: "休息", next: "sleep1" }
         ]
@@ -442,10 +442,10 @@
       check_bed: {
         location: "房間",
         speaker: "旁白",
-        text: "你在床板下發現了一根生鏽的鐵絲。",
+        text: "你在床板下發現了一支手機。",
         charImg: "",
         bg:"ChatGPT Image 2026年2月5日 上午11_55_39.png",
-        action: () => { if(!playerState.inventory.includes("鐵絲")) playerState.inventory.push("鐵絲"); },
+        action: () => { if(!playerState.inventory.includes("手機")) playerState.inventory.push("手機"); },
         choices: [{ text: "收起來", next: "story1" }]
       },
       bribe_success: {
@@ -672,7 +672,7 @@
       next14: {
         location: "宿舍",
         speaker: "張教官",
-        text: "突擊檢查！所有人站到牆邊！要是讓我搜到違禁品，你們就死定了！",
+        text: "突擊檢查！因為066舉報有人藏手機!所有人站到牆邊！要是讓我搜到違禁品，你們就死定了！",
         charImg: "chang.png",
         choices: [{ text: "心驚膽顫地接受檢查", next: "event_search" }]
       },
@@ -682,9 +682,9 @@
         text: "下一位",
         charImg: "chang.png",
         action: () => {
-          if (playerState.inventory.includes("鐵絲")) {
+          if (playerState.inventory.includes("手機")) {
             playerState.credit -= 4;
-            playerState.inventory = playerState.inventory.filter(item => item !== "鐵絲");
+            playerState.inventory = playerState.inventory.filter(item => item !== "手機");
           }
         },
         choices: [{ text: "點擊繼續", next: "story4" }]
