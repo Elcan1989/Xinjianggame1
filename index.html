@@ -192,6 +192,7 @@
 
     .item-slot img { width: 35px; height: 35px; margin-bottom: 4px; }
     
+    /* 日期與地點顯示層 */
     .ui-top-right {
       position: absolute;
       top: 20px;
@@ -263,6 +264,7 @@
   </main>
 
   <script>
+    // --- 遊戲狀態 ---
     let playerState = { day: 1, credit: 3, money: 100, inventory: [], quests: [], currentNode: 'start'};
     let currentIntroIndex = 0;
     let isTyping = false;
@@ -286,6 +288,7 @@
       "後門鑰匙": "https://cdn-icons-png.flaticon.com/512/3082/3082043.png"
     };
 
+    // --- 打字機邏輯 ---
     function typeWriter(element, text, speed = 60) {
       clearInterval(timer);
       fullText = text;
@@ -311,6 +314,7 @@
       document.querySelector('.click-hint').style.opacity = 1;
     }
 
+    // --- 前情提要導航 ---
     function nextIntro() {
       const content = document.getElementById('intro-content');
       const introImg = document.getElementById('intro-img');
@@ -347,6 +351,7 @@
       }
     }
 
+    // --- 遊戲核心邏輯 ---
     const nodes = {
       start: {
         location: "勞改營入口",
@@ -533,7 +538,7 @@
         location: "房間",
         speaker: "鄰居",
         text: "嘿，小聲點... 我聽說後門那邊守備比較鬆...",
-        choices: [{ text: "點擊繼續", next: "sleep2" }]
+        choices: [{ text: "點擊繼續", next: "story2" }]
       },
       sleep2: {
         location: "房間",
@@ -631,7 +636,7 @@
         text:"這是世界上最美（難）味（吃）的螢光咖喱（廚餘）了，你因為吃了這一餐而暈倒，損失50元",
         charImg: "",
         action: () => {playerState.money -= 50;},
-        choices: [{ text: "繼續遊戲", next: "sleep3" }]
+        choices: [{ text: "繼續遊戲", next: "day4" }]
       },
       noeat: {
         location: "房間",
@@ -643,97 +648,28 @@
       next13: {
         location: "房間",
         speaker: "神秘人",
-        text: "你是要我吐口水在你的飯裡嗎，不准講話",
+        text: "你是要我吐口水在你的飯裡嗎",
         charImg: "",
-        action: () => { playerState.credit -= 4; },
-        choices: [{ text: "點擊繼續", next: "sleep3" }]
+        action: () => { playerState.credit -= 5; },
+        choices: [{ text: "點擊繼續", next: "" }]
       },
-      sleep3: {
+      story5: {
         location: "房間",
         speaker: "旁白",
-        text: "不知道為什麼，你很快的就進入了夢鄉。",
+        text: "今天是個月黑高夜晚，很適合逃離這裡，你該怎麼做",
         charImg: "",
-        bg:"ChatGPT Image 2026年2月5日 上午11_55_39.png",
-        choices: [{ text: "點擊繼續", next: "day4" }]
+        choices: [{ text: "點擊繼續", next: "" }]
       },
-      day4: {
-        location: "房間",
-        speaker: "旁白",
-        text: "第 4 天開始了，勞改營的生活變得更加難以預測...",
-        action: () => { playerState.day = 4; }, // 強制設定天數為 4
-        choices: [{ text: "開始新的一天", next: "random_trigger" }]
-      },
-      trigger_event: {
-        action: () => { handleRandomEvent(); } // 這裡執行完後，handleRandomEvent 會呼叫下一個 renderNode
-      },
-      event_search: {
-        location: "宿舍",
-        speaker: "張教官",
-        text: "突擊檢查！所有人站到牆邊！要是讓我搜到違禁品，你們就死定了！",
-        charImg: "chang.png",
-        choices: [{ text: "（心驚膽顫地接受檢查）", next: "event_search1" }]
-      },
-      event_search1: {
-        location: "宿舍",
-        speaker: "張教官",
-        text: "下一位",
-        charImg: "chang.png",
-        action: () => {
-          if (playerState.inventory.includes("鐵絲")) {
-            playerState.credit -= 4;
-            playerState.inventory = playerState.inventory.filter(item => item !== "鐵絲");
-          }
-        },
-        choices: [{ text: "點擊繼續", next: "event_end" }]
-      },
-      event_propaganda: {
-        location: "大講堂",
-        speaker: "楊主席 (大「屏」公播)",
-        text: "打掃是為了做功德，聽主席的話是為了讓你更厲害...",
-        choices: [
-          { text: "認真聽", next: "listen1" },
-          { text: "不認真聽", next: "nolisten1" }
-        ]
-      },
-      listen1: {
-        location: "大講堂",
-        speaker: "楊主席 (大「屏」公播)",
-        text: "你們都懂了嗎",
-        action: () => { playerState.credit += 2; },
-        choices: [{ text: "休息", next: "event_end" }]
-      },
-      nolisten1: {
-        location: "大講堂",
-        speaker: "楊主席 (大「屏」公播)",
-        text: "你當作再聽故事(ㄕ˙)嗎?",
-        action: () => { playerState.credit -= 2; },
-        choices: [{ text: "休息", next: "event_end" }]
-      },
-      event_hardwork: {
-        location: "陽台",
-        speaker: "張教官",
-        text: "今天每個人延後休息要多搬200瓶水跟100箱奇異果，沒搬不完不准吃飯！",
-        action: () => { playerState.money += 40; },
-        choices: [{ text: "埋頭苦幹", next: "event_end" }]
-      },
-      event_end: {
-        location: "房間",
-        speaker: "旁白",
-        text: "這一天終於結束了，你感到筋疲力竭。",
-        choices: [{ text: "休息", next: "day_cycle_check" }]
-      },
-      day_cycle_check: {
-        action: () => { playerState.day += 1; },
-        choices: [{ text: "點擊繼續", next: "random_trigger" }]
-      },
+      // 隱藏結局：社會信用達標
       ending_credit: {
         location: "勞改營大門",
         speaker: "楊主席",
         text: "你的表現非常優異，充分展現了教化的成果。你現在自由了，去向世人傳頌這裡的美好吧。",
-        charImg: "yang.png",
+        charImg: "yang.png", // 假設你有主席的圖
         bg: "freedom_gate.png",
         choices: [{ text: "迎向自由（重新開始）", next: "reset_game" }]
       },
+      // 隱藏結局：第十天被教化
       ending_indoctrinated: {
         location: "洗腦教室",
         speaker: "旁白",
@@ -742,6 +678,7 @@
         bg: "classroom.png",
         choices: [{ text: "成為模範勞工（重新開始）", next: "reset_game" }]
       },
+      // 隱藏結局:死亡
       game_over_credit: {
         location: "勞改營陰暗的角落",
         speaker: "士兵",
@@ -751,20 +688,16 @@
         choices: [{ text: "重新開始", next: "reset_game" }]
       }
     };
-
+    
     function updateUI() {
       document.getElementById('ui-credit').textContent = playerState.credit;
       document.getElementById('ui-money').textContent = playerState.money;
-
-      // 修正後的安全寫法：先確認 playerState.quests 存在且有長度
-      const currentQuest = (playerState.quests && playerState.quests.length > 0) 
-        ? playerState.quests[playerState.quests.length - 1] 
-        : "無";
-    
-      document.getElementById('ui-quest').textContent = currentQuest;
+      document.getElementById('ui-quest').textContent = playerState.quests[playerState.quests.length - 1] || "無";
+      
+      // 更新日期
       document.getElementById('game-day').textContent = `第 ${playerState.day} 天`;
       document.getElementById('ui-day-alt').textContent = playerState.day;
-      
+
       const grid = document.getElementById('item-grid');
       grid.innerHTML = "";
       for (let i = 0; i < 8; i++) {
@@ -783,19 +716,6 @@
       }
     }
 
-    function handleRandomEvent() {
-      const eventList = ['event_search', 'event_propaganda', 'event_hardwork'];
-      const randomEvent = eventList[Math.floor(Math.random() * eventList.length)];
-  
-      if (!nodes[randomEvent]) {
-        console.error("找不到事件節點:", randomEvent);
-        renderNode('story1'); // 如果出錯，至少把玩家送回房間
-        return;
-      }
-  
-      renderNode(randomEvent);
-    }
-      
     function renderNode(nodeId) {
       if(nodeId === 'reset_game') {
         playerState = { day: 1, credit: 3, money: 100, inventory: [], quests: [], currentNode: 'start' };
@@ -808,28 +728,39 @@
 
       if (node.action) node.action();
       
-      // 結局檢查
-      if (playerState.credit <= 0 && nodeId !== 'game_over_credit') {
-        renderNode('game_over_credit');
-        return;
-      }
+      // --- 結局判斷邏輯開始 ---
+      
+      // 1. 檢查社會信用點數 (劇情 1)
       if (playerState.credit >= 20 && nodeId !== 'ending_credit') {
         renderNode('ending_credit');
         return;
       }
-      if (playerState.day >= 10 && !nodeId.startsWith('ending') && nodeId !== 'game_over_credit') {
+      
+      // 2. 檢查信用過低 (原有邏輯)
+      if (playerState.credit <= 0 && nodeId !== 'game_over_credit') {
+        renderNode('game_over_credit');
+        return;
+      }
+
+      // 3. 檢查第十天 (劇情 2)
+      // 注意：這裡假設你希望在第 10 天一到就觸發
+      if (playerState.day >= 10 && nodeId !== 'ending_indoctrinated') {
         renderNode('ending_indoctrinated');
         return;
       }
 
+      // --- 結局判斷邏輯結束 ---
+
       updateUI();
 
+      // 切換背景圖
       if (node.bg) {
         document.getElementById('game-main').style.backgroundImage = `url('${node.bg}')`;
       }
 
-      document.getElementById('location').textContent = node.location || "";
-      document.getElementById('speaker').textContent = node.speaker || "";
+      document.getElementById('location').textContent = node.location;
+      document.getElementById('speaker').textContent = node.speaker;
+      
       const dialogueEl = document.getElementById('dialogue');
       typeWriter(dialogueEl, node.text, 30);
   
@@ -843,16 +774,14 @@
 
       const choicesEl = document.getElementById('choices');
       choicesEl.innerHTML = "";
-      if (node.choices) {
-        node.choices.forEach(choice => {
-          if (choice.condition && !choice.condition()) return;
-          const btn = document.createElement('button');
-          btn.className = "choice-btn";
-          btn.textContent = choice.text;
-          btn.onclick = () => renderNode(choice.next);
-          choicesEl.appendChild(btn);
-        });
-      }
+      node.choices.forEach(choice => {
+        if (choice.condition && !choice.condition()) return;
+        const btn = document.createElement('button');
+        btn.className = "choice-btn";
+        btn.textContent = choice.text;
+        btn.onclick = () => renderNode(choice.next);
+        choicesEl.appendChild(btn);
+      });
     }
 
     function toggleInventory() {
