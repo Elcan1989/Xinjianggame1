@@ -660,6 +660,7 @@
         location: "房間",
         speaker: "旁白",
         text: "第 4 天開始了，勞改營的生活變得更加難以預測...",
+        action: () => { playerState.day = 4; }, // 強制設定天數為 4
         choices: [{ text: "開始新的一天", next: "random_trigger" }]
       },
       random_trigger: {
