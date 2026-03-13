@@ -466,9 +466,9 @@
         text: "不知道為什麼，你很快的就進入了夢鄉。",
         charImg: "",
         bg:"ChatGPT Image 2026年2月5日 上午11_55_39.png",
-        choices: [{ text: "點擊繼續", next: "day1" }]
+        choices: [{ text: "點擊繼續", next: "day2" }]
       },
-      day1: {
+      day2: {
         location: "棉花田",
         speaker: "馮教官",
         text: "各位，今天是你們第一天工作，我們來看看這個告示板，這會讓你知道你要幹嘛。",
@@ -619,9 +619,9 @@
         speaker: "陳教官",
         text: "第一名是我的愛徒，他太棒了，我要給他三十點",
         charImg: "",
-        choices: [{ text: "點擊繼續", next: "story4" }]
+        choices: [{ text: "點擊繼續", next: "story3" }]
       },
-      story4: {
+      story3: {
         location: "房間",
         speaker: "旁白",
         text: "今天晚餐看起來很美（噁）味（心）的螢光咖喱（廚餘），你要把他吃掉嗎",
@@ -651,15 +651,137 @@
         text: "你是要我吐口水在你的飯裡嗎",
         charImg: "",
         action: () => { playerState.credit -= 5; },
-        choices: [{ text: "點擊繼續", next: "" }]
+        choices: [{ text: "點擊繼續", next: "sleep3" }]
+      },
+      sleep3: {
+        location: "房間",
+        speaker: "旁白",
+        text: "不知道為什麼，你很快的就進入了夢鄉。",
+        charImg: "",
+        bg:"ChatGPT Image 2026年2月5日 上午11_55_39.png",
+        choices: [{ text: "點擊繼續", next: "day4" }]
+      },
+      day4: {
+        location: "勞改營廣播",
+        speaker: "廣播",
+        text: "全體集合！",
+        charImg: "", 
+        action: () => { playerState.day = 4; }, 
+        choices: [{ text: "點擊繼續", next: "next14" }]
+      },
+      next14: {
+        location: "宿舍",
+        speaker: "張教官",
+        text: "突擊檢查！所有人站到牆邊！要是讓我搜到違禁品，你們就死定了！",
+        charImg: "chang.png",
+        choices: [{ text: "心驚膽顫地接受檢查", next: "event_search" }]
+      },
+      event_search: {
+        location: "宿舍",
+        speaker: "張教官",
+        text: "下一位",
+        charImg: "chang.png",
+        action: () => {
+          if (playerState.inventory.includes("鐵絲")) {
+            playerState.credit -= 4;
+            playerState.inventory = playerState.inventory.filter(item => item !== "鐵絲");
+          }
+        },
+        choices: [{ text: "點擊繼續", next: "story4" }]
+      },
+      story4: {
+        location: "房間",
+        speaker: "旁白",
+        text: "嚇死了，還是趕快睡覺吧",
+        charImg: "",
+        choices: [{ text: "點擊繼續", next: "sleep4" }]
+      },
+      sleep4: {
+        location: "房間",
+        speaker: "旁白",
+        text: "不知道為什麼，你很快的就進入了夢鄉。",
+        charImg: "",
+        bg:"ChatGPT Image 2026年2月5日 上午11_55_39.png",
+        choices: [{ text: "點擊繼續", next: "day5" }]
+      },
+      day5: {
+        location: "房間",
+        speaker: "旁白",
+        text: "今天是主席的言講日",
+        charImg: "", 
+        action: () => { playerState.day = 5; }, 
+        choices: [{ text: "點擊繼續", next: "next15" }]
+      },
+      next15: {
+        location: "活動中心",
+        speaker: "楊主席 (大「屏」公播)",
+        text: "打掃是為了做功德，聽主席的話是為了讓你更厲害...",
+        charImg: "",
+        choices: [
+          { text: "認真聽", next: "listen1" },
+          { text: "不認真聽", next: "nolisten1" }]
+      },
+       listen1: {
+        location: "大講堂",
+        speaker: "楊主席 (大「屏」公播)",
+        text: "你們都懂了嗎",
+        action: () => { playerState.credit += 2; },
+        choices: [{ text: "休息", next: "story5" }]
+      },
+      nolisten1: {
+        location: "大講堂",
+        speaker: "楊主席 (大「屏」公播)",
+        text: "你當作再聽故事(ㄕ˙)嗎?",
+        action: () => { playerState.credit -= 2; },
+        choices: [{ text: "休息", next: "story5" }]
       },
       story5: {
+        location: "房間",
+        speaker: "旁白",
+        text: "今天毫無收穫，還是睡覺比較實在",
+        charImg: "",
+        choices: [{ text: "點擊繼續", next: "sleep5" }]
+      },
+      sleep5: {
+        location: "房間",
+        speaker: "旁白",
+        text: "不知道為什麼，你很快的就進入了夢鄉。",
+        charImg: "",
+        bg:"ChatGPT Image 2026年2月5日 上午11_55_39.png",
+        choices: [{ text: "點擊繼續", next: "day6" }]
+      },
+      day6: {
+        location: "陽台",
+        speaker: "張教官",
+        text: "主席下達命令，要支援以阿戰爭，要搬運物資",
+        charImg: "", 
+        action: () => { playerState.day = 5; }, 
+        choices: [{ text: "點擊繼續", next: "next16" }]
+      },
+      next16: {
+        location: "陽台",
+        speaker: "旁白",
+        text: "該去休息了，等一下",
+        charImg: "",
+        choices: [{ text: "點擊繼續", next: "next17" }]
+      },
+      next17: {
+        location: "陽台",
+        speaker: "張教官",
+        text: "今天每個人延後休息，要多搬200瓶水跟100箱奇異果，沒搬不完不准吃飯！",
+        charImg: "",
+        action: () => { playerState.money += 40; },
+        choices: [{ text: "埋頭苦幹", next: "" }]
+      },
+
+      story9: {
         location: "房間",
         speaker: "旁白",
         text: "今天是個月黑高夜晚，很適合逃離這裡，你該怎麼做",
         charImg: "",
         choices: [{ text: "點擊繼續", next: "" }]
       },
+      
       // 隱藏結局：社會信用達標
       ending_credit: {
         location: "勞改營大門",
