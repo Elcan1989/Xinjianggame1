@@ -262,13 +262,19 @@
     .credits-hidden { display: none; }
 
     #close-credits-btn {
-        margin-top: 50px;
-        padding: 10px 30px;
+        position: fixed;   /* 改為固定定位 */
+        bottom: 50px;      /* 距離底部 50 像素 */
+        left: 50%;
+        transform: translateX(-50%); /* 居中 */
+        z-index: 10000;    /* 確保在名單之上 */
+        padding: 12px 40px;
         background: #e0c097;
+        color: #000;
+        font-weight: bold;
         border: none;
+        border-radius: 30px; /* 膠囊形狀比較好看 */
         cursor: pointer;
-        font-size: 1.1rem;
-        border-radius: 5px;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.5);
     }
   </style>
 </head>
@@ -321,27 +327,26 @@
 
         <div class="credits-wrapper">
             <div class="credits-content" id="credits-list">
-                <h1 class="game-title">新疆大冒險 1</h1>
+                <h1 class="game-title">逃離勞改營 1</h1>
               
                 <div class="section">
                     <h3>製作人 Producer</h3>
-                    <p>Elcan</p>
+                    <p>機智楊老生活製作小組</p>
                 </div>
 
                 <div class="section">
                     <h3>程式開發 Programming</h3>
-                    <p>Elcan</p>
+                    <p>機智楊老生活製作小組andAI</p>
                 </div>
 
                 <div class="section">
                     <h3>美術設計 Art Design</h3>
-                    <p>你的名字 / 團隊名稱</p>
+                    <p>AI</p>
                 </div>
       
                 <div class="section">
                     <h3>特別感謝 Special Thanks</h3>
                     <p>所有支持這部作品的朋友</p>
-                    <p>新疆的美麗山河</p>
                 </div>
       
                 <div class="thanks-msg">感謝遊玩！</div>
