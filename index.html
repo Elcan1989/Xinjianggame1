@@ -1284,34 +1284,17 @@
     }
     
     function hideCredits() {
-        const screen = document.getElementById('credits-screen');
         const bgm = document.getElementById('credits-bgm');
-        const introOverlay = document.getElementById('intro-overlay');
-        const gameMain = document.getElementById('game-main');
+    
+        // 1. 停止音樂
+        if (bgm) {
+            bgm.pause();
+            bgm.currentTime = 0;
+        }
 
-        // 1. 隱藏工作人員名單並停止音樂
-        screen.classList.add('credits-hidden');
-        bgm.pause();
-        bgm.currentTime = 0;
-
-        // 2. 重置遊戲邏輯狀態 (變回第 1 天、初始信用點數等)
-        playerState = { 
-            day: 1, 
-            credit: 3, 
-            money: 100, 
-            inventory: [], 
-            quests: [], 
-            currentNode: 'start' 
-        };
-
-        // 3. 切換畫面：關閉遊戲主體，顯示最一開始的前情提要
-        gameMain.style.display = 'none';
-        introOverlay.style.display = 'flex';
-
-        // 4. 重置前情提要的索引，從第一句台詞開始
-        currentIntroIndex = 0;
-        const introContent = document.getElementById('intro-content');
-        typeWriter(introContent, introLines[0].text);
+        // 2. 直接跳轉到你的 GitHub 下載頁面
+        // 請將下方的網址替換成你真正的下載頁面網址
+        window.location.href = "https://github.com/Elcan1989/Xinjianggame1";
     }
   </script>
 </body>
