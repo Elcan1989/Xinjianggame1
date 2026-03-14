@@ -887,7 +887,7 @@
         speaker: "旁白",
         text: "今天要考試，你要隨便念，還是認真看一下",
         charImg: "", 
-        action: () => { playerState.day = 8; }, 
+        action: () => { playerState.day = 9; }, 
         choices: [{ text: "隨便念", next: "next23" },
                   { text: "認真念", next: "next24"}]
       },
@@ -910,12 +910,78 @@
       story9: {
         location: "房間",
         speaker: "旁白",
-        text: "今天是個月黑高夜晚，很適合逃離這裡，你該怎麼做",
+        text: "今晚月黑高風，是逃跑的好機會。這可能是你最後的機會，你要嘗試逃跑嗎？",
         charImg: "",
-        choices: [{ text: "逃跑", next: "" },
-                  { text: "呆著", next: "" }]
+        bg: "ChatGPT Image 2026年2月5日 上午11_55_39.png",
+        choices: [{ text: "嘗試從後門逃跑", next: "check_escape_condition" },
+                  { text: "太冒險了，繼續待著", next: "stay_and_wait" }
+        ]
       },
       
+      // --- 逃跑判定邏輯 ---
+      check_escape_condition: {
+        location: "後門暗巷",
+        speaker: "系統判定",
+        text: "正在檢查你的逃脫條件...",
+        action: () => {
+          // 檢查條件：有鑰匙、點數 >= 5、錢 >= 100
+          const hasKey = playerState.inventory.includes("後門鑰匙");
+          const enoughCredit = playerState.credit >= 5;
+          const enoughMoney = playerState.money >= 100;
+
+          setTimeout(() => {
+            if (hasKey && enoughCredit && enoughMoney) {
+              renderNode('escape_success');
+            } else {
+              renderNode('escape_fail');
+            }
+          }, 1000);
+        },
+        choices: []
+      },
+      
+      // --- 結局：成功逃脫 ---
+      escape_success: {
+        location: "吉爾吉斯邊境",
+        speaker: "旁白",
+        text: "你用賄賂得來的鑰匙打開了沉重的鐵門，憑藉著這幾天累積的信用巧妙避開了巡邏隊。最後，你用剩下的100元會落了守護新疆那條線的人...你成功逃離了勞改營！",
+        charImg: "",
+        bg: "https://images.unsplash.com/photo-1441974231531-c6227db76b6e?auto=format&fit=crop&w=1000&q=80",
+        choices: [{ text: "自由的結局", next: "reset_game" }]
+      },
+
+      // --- 結局：逃跑失敗 ---
+      escape_fail: {
+        location: "禁閉室",
+        speaker: "楊主席",
+        text: "我就知道你有問題！鑰匙哪來的？來人啊，把他帶走！",
+        charImg: "",
+        choices: [{ text: "被抓住了...", next: "sleep9" }]
+      },
+
+      // --- 節點：選擇不逃跑 ---
+      stay_and_wait: {
+        location: "房間",
+        speaker: "旁白",
+        text: "你決定再觀察看看。但機會是不等人的人，隨著天亮，戒備又變得森嚴了。",
+        choices: [{ text: "繼續", next: "sleep9" }] // 回到循環或進入第十天結局
+      },
+      sleep9: {
+        location: "房間",
+        speaker: "旁白",
+        text: "不知道為什麼，你很快的就進入了夢鄉。",
+        charImg: "",
+        bg:"ChatGPT Image 2026年2月5日 上午11_55_39.png",
+        choices: [{ text: "點擊繼續", next: "day10" }]
+      },
+      day10: {
+        location: "宇宙的某個角落",
+        speaker: "#.!$!%(@^%#%*(&(#",
+        text: "哈哈哈",
+        charImg: "", 
+        action: () => { playerState.day = 10; }, 
+        choices: [{ text: "點擊繼續", next: "day10" }]
+      },
       // 隱藏結局：社會信用達標
       ending_credit: {
         location: "勞改營大門",
@@ -932,7 +998,7 @@
         text: "第十天到了。你的眼神已經失去了光芒，你覺得這裡就是家，打掃就是做功德。你永遠離不開了。",
         charImg: "",
         bg: "classroom.png",
-        choices: [{ text: "成為模範勞工（重新開始）", next: "reset_game" }]
+        choices: [{ text: "成為免費勞工（重新開始）", next: "reset_game" }]
       },
       // 隱藏結局:死亡
       game_over_credit: {
