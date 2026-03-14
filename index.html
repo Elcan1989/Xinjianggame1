@@ -896,23 +896,33 @@
         speaker: "旁白",
         text: "結果出來了，不小心考很高，主席很開心，給你1點",
         charImg: "",
-        action: () => { playerState.credit += 1; },
-        choices: [{ text: "休息", next: "story9" }]
+        choices: [{ text: "休息", next: "story90" }]
       },
       next24: {
         location: "試場",
         speaker: "旁白",
         text: "結果出來了，你很認真，結果考太爛，主席很生氣",
         charImg: "",
-        action: () => { playerState.credit -= 1; },
-        choices: [{ text: "休息", next: "story9" }]
+        choices: [{ text: "休息", next: "story91" }]
       },
-      story9: {
+      story90: {
         location: "房間",
         speaker: "旁白",
         text: "今晚月黑高風，是逃跑的好機會。這可能是你最後的機會，你要嘗試逃跑嗎？",
         charImg: "",
         bg: "ChatGPT Image 2026年2月5日 上午11_55_39.png",
+        action: () => { playerState.credit += 1; },
+        choices: [{ text: "嘗試從後門逃跑", next: "check_escape_condition" },
+                  { text: "太冒險了，繼續待著", next: "stay_and_wait" }
+        ]
+      },
+      story91: {
+        location: "房間",
+        speaker: "旁白",
+        text: "今晚月黑高風，是逃跑的好機會。這可能是你最後的機會，你要嘗試逃跑嗎？",
+        charImg: "",
+        bg: "ChatGPT Image 2026年2月5日 上午11_55_39.png",
+        action: () => { playerState.credit -= 1; },
         choices: [{ text: "嘗試從後門逃跑", next: "check_escape_condition" },
                   { text: "太冒險了，繼續待著", next: "stay_and_wait" }
         ]
