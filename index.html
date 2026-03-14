@@ -219,6 +219,57 @@
       padding: 5px 15px;
       border-radius: 4px;
     }
+
+    /* 遮罩背景 */
+    #credits-screen {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: #000; /* 全黑背景更有電影感 */
+        z-index: 9999;
+        overflow: hidden;
+        color: #e0c097; /* 暖金色文字 */
+        font-family: "Microsoft JhengHei", sans-serif;
+    }
+
+    /* 滾動容器 */
+    .credits-wrapper {
+        position: absolute;
+        top: 100%; /* 從螢幕下方開始 */
+        width: 100%;
+        text-align: center;
+    }
+
+    /* 觸發動畫 */
+    .start-scrolling {
+        animation: scroll-up 20s linear forwards; /* 20秒捲動時間，可自行調整 */
+    }
+
+    @keyframes scroll-up {
+        0% { top: 100%; }
+        100% { top: -150%; } /* 根據名單長度調整這個負值 */
+    }
+
+    .section { margin-bottom: 50px; }
+    .section h3 { color: #fff; font-size: 1.5rem; margin-bottom: 10px; }
+    .section p { font-size: 1.2rem; }
+    .game-title { font-size: 3rem; margin-bottom: 100px; color: #ffcc00; }
+    .thanks-msg { font-size: 2rem; margin-top: 100px; }
+
+    /* 隱藏狀態 */
+    .credits-hidden { display: none; }
+
+    #close-credits-btn {
+        margin-top: 50px;
+        padding: 10px 30px;
+        background: #e0c097;
+        border: none;
+        cursor: pointer;
+        font-size: 1.1rem;
+        border-radius: 5px;
+    }
   </style>
 </head>
 <body>
@@ -957,7 +1008,7 @@
         text: "你用賄賂得來的鑰匙打開了沉重的鐵門，憑藉著這幾天累積的信用巧妙避開了巡邏隊。最後，你用剩下的100元會落了守護新疆那條線的人...你成功逃離了勞改營！",
         charImg: "",
         bg: "https://images.unsplash.com/photo-1441974231531-c6227db76b6e?auto=format&fit=crop&w=1000&q=80",
-        choices: [{ text: "自由的結局", next: "reset_game" }]
+        choices: [{ text: "自由的結局", next: "show_credits_now" }]
       },
 
       // --- 結局：逃跑失敗 ---
@@ -999,7 +1050,7 @@
         text: "你的表現非常優異，充分展現了教化的成果。你現在自由了，去向世人傳頌這裡的美好吧。",
         charImg: "yang.png", 
         bg: "freedom_gate.png",
-        choices: [{ text: "迎向自由（重新開始）", next: "reset_game" }]
+        choices: [{ text: "迎向自由（感謝遊玩）", next: "show_credits_now" }]
       },
       // 隱藏結局：第十天被教化
       ending_indoctrinated: {
@@ -1008,7 +1059,7 @@
         text: "第十天到了。你的眼神已經失去了光芒，你覺得這裡就是家，打掃就是做功德。你永遠離不開了。",
         charImg: "",
         bg: "classroom.png",
-        choices: [{ text: "成為免費勞工（重新開始）", next: "reset_game" }]
+        choices: [{ text: "成為免費勞工(感謝遊玩)", next: "show_credits_now" }]
       },
       // 隱藏結局:死亡
       game_over_credit: {
@@ -1017,8 +1068,17 @@
         text: "你被主席認定為無法教化的人。看來你不想活了，讓我助你一臂之力吧。",
         charImg: "Gemini_Generated_Image_suylcdsuylcdsuyl.png",
         bg:"ChatGPT Image 2026年2月5日 上午11_55_39.png",
-        choices: [{ text: "重新開始", next: "reset_game" }]
-      }
+        choices: [{ text: "感謝遊玩", next: "show_credits_now" }]
+      },
+      show_credits_now: {
+          location: "結束",
+          speaker: "系統",
+          text: "準備播放製作人員名單...",
+          action: () => {
+              showCredits();
+          },
+          choices: [] // 這裡不需要按鈕，因為 showCredits 會遮蓋掉畫面
+      },
     };
     
     function updateUI() {
@@ -1149,6 +1209,72 @@
       } catch (e) {
         alert("存檔檔案損毀。");
       }
+    }
+
+    <div id="credits-screen" class="credits-hidden">
+        <audio id="credits-bgm" loop>
+            <source src="music/xinjiang-folk.mp3" type="audio/mpeg">
+        </audio>
+
+        <div class="credits-wrapper">
+            <div class="credits-content" id="credits-list">
+                <h1 class="game-title">新疆大冒險 1</h1>
+              
+                <div class="section">
+                    <h3>製作人 Producer</h3>
+                    <p>Elcan</p>
+                </div>
+
+                <div class="section">
+                    <h3>程式開發 Programming</h3>
+                    <p>Elcan</p>
+                </div>
+
+                <div class="section">
+                    <h3>美術設計 Art Design</h3>
+                    <p>你的名字 / 團隊名稱</p>
+                </div>
+
+                <div class="section">
+                    <h3>特別感謝 Special Thanks</h3>
+                    <p>所有支持這部作品的朋友</p>
+                    <p>新疆的美麗山河</p>
+                </div>
+
+                <div class="thanks-msg">感謝遊玩！</div>
+            
+                <button id="close-credits-btn" onclick="hideCredits()">回到主畫面</button>
+            </div>
+        </div>
+    </div>
+    function showCredits() {
+        const screen = document.getElementById('credits-screen');
+        const wrapper = document.querySelector('.credits-wrapper');
+        const bgm = document.getElementById('credits-bgm');
+
+        // 1. 顯示遮罩
+        screen.classList.remove('credits-hidden');
+    
+        // 2. 開始播放音樂
+        bgm.play().catch(e => console.log("音樂播放被瀏覽器攔截，需玩家互動"));
+
+        // 3. 觸發滾動動畫
+        wrapper.classList.add('start-scrolling');
+
+        // 4. (選配) 動畫結束後顯示關閉按鈕，或自動跳轉
+        // 這裡設一個定時器，時間跟 CSS 的 20s 一致
+        setTimeout(() => {
+            console.log("滾動結束");
+        }, 20000);
+    }
+    
+    function hideCredits() {
+        const screen = document.getElementById('credits-screen');
+        const bgm = document.getElementById('credits-bgm');
+    
+        screen.classList.add('credits-hidden');
+        bgm.pause();
+        bgm.currentTime = 0; // 重置音樂
     }
   </script>
 </body>
