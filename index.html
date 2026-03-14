@@ -882,12 +882,38 @@
         bg:"ChatGPT Image 2026年2月5日 上午11_55_39.png",
         choices: [{ text: "點擊繼續", next: "day9" }]
       },
+      day9: {
+        location: "試場",
+        speaker: "旁白",
+        text: "今天要考試，你要隨便念，還是認真看一下",
+        charImg: "", 
+        action: () => { playerState.day = 8; }, 
+        choices: [{ text: "隨便念", next: "next23" },
+                  { text: "認真念", next: "next24"}]
+      },
+      next23: {
+        location: "試場",
+        speaker: "旁白",
+        text: "結果出來了，不小心考很高，主席很開心，給你1點",
+        charImg: "",
+        action: () => { playerState.credit += 1; },
+        choices: [{ text: "休息", next: "story9" }]
+      },
+      next24: {
+        location: "試場",
+        speaker: "旁白",
+        text: "結果出來了，你很認真，結果考太爛，主席很生氣",
+        charImg: "",
+        action: () => { playerState.credit -= 1; },
+        choices: [{ text: "休息", next: "story9" }]
+      },
       story9: {
         location: "房間",
         speaker: "旁白",
         text: "今天是個月黑高夜晚，很適合逃離這裡，你該怎麼做",
         charImg: "",
-        choices: [{ text: "點擊繼續", next: "" }]
+        choices: [{ text: "逃跑", next: "" },
+                  { text: "呆著", next: "" }]
       },
       
       // 隱藏結局：社會信用達標
