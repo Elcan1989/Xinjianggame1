@@ -1115,11 +1115,11 @@
       show_credits_now: {
           location: "結束",
           speaker: "系統",
-          text: "準備播放製作人員名單...",
+          text: "播放製作人員名單完畢...",
           action: () => {
               showCredits();
           },
-          choices: [] // 這裡不需要按鈕，因為 showCredits 會遮蓋掉畫面
+          choices: [{ text: "感謝遊玩", next: "reset_game" }]
       },
     };
     
