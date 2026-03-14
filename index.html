@@ -710,6 +710,14 @@
         text: "今天是主席的言講日",
         charImg: "", 
         action: () => { playerState.day = 5; }, 
+        choices: [{ text: "點擊繼續", next: "day5-1" }]
+      },
+      day5-1: {
+        location: "房間",
+        speaker: "旁白",
+        text: "你竟然活到了今天，送你個禮物，祝你早日離開這",
+        charImg: "", 
+        action: () => { playerState.credit += 1; }, 
         choices: [{ text: "點擊繼續", next: "next15" }]
       },
       next15: {
@@ -725,7 +733,7 @@
         location: "大講堂",
         speaker: "楊主席 (大「屏」公播)",
         text: "你們都懂了嗎",
-        action: () => { playerState.credit += 2; },
+        action: () => { playerState.credit += 4; },
         choices: [{ text: "休息", next: "story5" }]
       },
       nolisten1: {
@@ -818,7 +826,7 @@
         speaker: "林教官",
         text: "好，下班",
         charImg: "",
-        action: () => { playerState.credit += 1; },
+        action: () => { playerState.credit += 2; },
         choices: [{ text: "下課", next: "story7" }]
       },
       next21: {
@@ -826,7 +834,7 @@
         speaker: "張教官",
         text: "再吵就給我閉嘴",
         charImg: "",
-        action: () => { playerState.credit -= 1; },
+        action: () => { playerState.credit -= 2; },
         choices: [{ text: "休息", next: "story7" }]
       },
       story7: {
@@ -843,6 +851,36 @@
         charImg: "",
         bg:"ChatGPT Image 2026年2月5日 上午11_55_39.png",
         choices: [{ text: "點擊繼續", next: "day8" }]
+      },
+      day8: {
+        location: "機場",
+        speaker: "葉教官",
+        text: "好來，動作加速",
+        charImg: "", 
+        action: () => { playerState.day = 8; }, 
+        choices: [{ text: "點擊繼續", next: "next22" }]
+      },
+      next22: {
+        location: "機場",
+        speaker: "葉教官",
+        text: "小花航空要起飛了",
+        charImg: "",
+        choices: [{ text: "休息", next: "story8" }]
+      },
+      story8: {
+        location: "房間",
+        speaker: "旁白",
+        text: "莫名其妙地過了一天",
+        charImg: "",
+        choices: [{ text: "點擊繼續", next: "sleep8" }]
+      },
+      sleep8: {
+        location: "房間",
+        speaker: "旁白",
+        text: "不知道為什麼，你很快的就進入了夢鄉。",
+        charImg: "",
+        bg:"ChatGPT Image 2026年2月5日 上午11_55_39.png",
+        choices: [{ text: "點擊繼續", next: "day9" }]
       },
       story9: {
         location: "房間",
