@@ -314,6 +314,43 @@
     </section>
   </main>
 
+  <div id="credits-screen" class="credits-hidden">
+        <audio id="credits-bgm" loop>
+            <source src="music/xinjiang-folk.mp3" type="audio/mpeg">
+        </audio>
+
+        <div class="credits-wrapper">
+            <div class="credits-content" id="credits-list">
+                <h1 class="game-title">新疆大冒險 1</h1>
+              
+                <div class="section">
+                    <h3>製作人 Producer</h3>
+                    <p>Elcan</p>
+                </div>
+
+                <div class="section">
+                    <h3>程式開發 Programming</h3>
+                    <p>Elcan</p>
+                </div>
+
+                <div class="section">
+                    <h3>美術設計 Art Design</h3>
+                    <p>你的名字 / 團隊名稱</p>
+                </div>
+      
+                <div class="section">
+                    <h3>特別感謝 Special Thanks</h3>
+                    <p>所有支持這部作品的朋友</p>
+                    <p>新疆的美麗山河</p>
+                </div>
+      
+                <div class="thanks-msg">感謝遊玩！</div>
+            
+                <button id="close-credits-btn" onclick="hideCredits()">回到主畫面</button>
+            </div>
+        </div>
+    </div>
+
   <script>
     // --- 遊戲狀態 ---
     let playerState = { day: 1, credit: 3, money: 100, inventory: [], quests: [], currentNode: 'start'};
@@ -1210,43 +1247,7 @@
         alert("存檔檔案損毀。");
       }
     }
-
-    <div id="credits-screen" class="credits-hidden">
-        <audio id="credits-bgm" loop>
-            <source src="music/xinjiang-folk.mp3" type="audio/mpeg">
-        </audio>
-
-        <div class="credits-wrapper">
-            <div class="credits-content" id="credits-list">
-                <h1 class="game-title">新疆大冒險 1</h1>
-              
-                <div class="section">
-                    <h3>製作人 Producer</h3>
-                    <p>Elcan</p>
-                </div>
-
-                <div class="section">
-                    <h3>程式開發 Programming</h3>
-                    <p>Elcan</p>
-                </div>
-
-                <div class="section">
-                    <h3>美術設計 Art Design</h3>
-                    <p>你的名字 / 團隊名稱</p>
-                </div>
-
-                <div class="section">
-                    <h3>特別感謝 Special Thanks</h3>
-                    <p>所有支持這部作品的朋友</p>
-                    <p>新疆的美麗山河</p>
-                </div>
-
-                <div class="thanks-msg">感謝遊玩！</div>
-            
-                <button id="close-credits-btn" onclick="hideCredits()">回到主畫面</button>
-            </div>
-        </div>
-    </div>
+    
     function showCredits() {
         const screen = document.getElementById('credits-screen');
         const wrapper = document.querySelector('.credits-wrapper');
