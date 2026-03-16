@@ -740,12 +740,26 @@
         speaker: "旁白",
         text:"因為你不想吃美(噁)味(心)的螢光咖哩，所以你就去跟隔壁的鄰居聊天",
         charImg: "",
-        choices: [{ text: "繼續遊戲", next: "next13" }]
+        choices: [{ text: "繼續遊戲", next: "next26" }]
+      },
+      next26: {
+        location: "房間",
+        speaker: "旁白",
+        text: "楊主席來視察了",
+        charImg: "",
+        choices: [{ text: "點擊繼續", next: "next13" }]
       },
       next13: {
         location: "房間",
-        speaker: "神秘人",
-        text: "你是要我吐口水在你的飯裡嗎",
+        speaker: "楊主席",
+        text: "你是要我吐口水在你的飯裡嗎!",
+        charImg: "",
+        choices: [{ text: "點擊繼續", next: "next25" }]
+      },
+      next25: {
+        location: "房間",
+        speaker: "旁白",
+        text: "因為你在吃飯時間講話，主席非常生氣",
         charImg: "",
         action: () => { playerState.credit -= 4; },
         choices: [{ text: "點擊繼續", next: "sleep3" }]
